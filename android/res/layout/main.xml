@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="#ccccff" android:orientation="vertical">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<ImageView android:layout_height="wrap_content"
+			android:padding="8dp" android:layout_width="wrap_content"
+			android:src="@drawable/android_normal" />
+
+		<TextView android:id="@+id/textview" android:layout_gravity="center_vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:textColor="#000000" android:text="What is the deepest place on earth?" />
+	</LinearLayout>
+
+	<EditText android:padding="8dp" android:id="@+id/text"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:hint="type here.." />
+
+	<TableLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:stretchColumns="*">
+		<TableRow>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<Button android:id="@+id/button" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+					android:text="Cheat" />
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<Button android:id="@+id/button" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+					android:text="Skip" />
+			</LinearLayout>
+		</TableRow>
+	</TableLayout>
+</LinearLayout>
