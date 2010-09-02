@@ -13,7 +13,7 @@ public class TestResource {
 	public Greeting getGreeting(
 			@QueryParam("username") @DefaultValue("world") String username) {
 		Greeting g = new Greeting();
-		g.setText("Hello");
+		g.setText("hello");
 		g.setRecipient(username);
 		return g;
 	}

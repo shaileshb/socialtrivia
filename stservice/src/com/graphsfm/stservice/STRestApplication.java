@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.ws.rs.core.Application;
 
+import com.graphsfm.stservice.resources.QuestionsResource;
 import com.graphsfm.stservice.resources.TestResource;
 
 public class STRestApplication extends Application {
@@ -19,7 +20,10 @@ public class STRestApplication extends Application {
 	public Set<Class<?>> getClasses() {
 		log.info("STRestApplication.getClasses() called");
 		HashSet<Class<?>> resources = new HashSet<Class<?>>();
+		
 		resources.add(TestResource.class);
+		resources.add(QuestionsResource.class);
+		
 		return resources;
 	}
 }
