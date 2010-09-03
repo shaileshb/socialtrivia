@@ -4,6 +4,7 @@
 	version="2.5">
 	<display-name>Social Trivia Service</display-name>
 
+	<!-- bootstrap guice -->
 	<filter>
 		<filter-name>guiceFilter</filter-name>
 		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
@@ -16,6 +17,6 @@
 		<listener-class>com.graphsfm.stservice.guice.STGuiceServletContextListener</listener-class>
 	</listener>
 
-	<!-- Use guice to define any other application specific servlets! See STServletModule.java. 
-		It does everything you would normally do in web.xml. -->
+	<!-- configure all application specific servlets and filters programmatically 
+		using the guice module STServletModule.java. -->
 </web-app>
