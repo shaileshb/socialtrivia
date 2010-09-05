@@ -8,7 +8,7 @@ public class STGuiceServletContextListener extends GuiceServletContextListener {
 	@Override
 	protected Injector getInjector() {
 		return Guice.createInjector(
-				new STServletModule(),
-				new MainModule());
+				new STServletModule(), // configures servlets and filters.
+				new MainModule()); // configures business logic services.
 	}
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.ServletModule;
 import com.graphsfm.stservice.STServlet;
-import com.sun.jersey.spi.container.servlet.ServletContainer;
+import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 public class STServletModule extends ServletModule {
 	@Override
@@ -15,7 +15,7 @@ public class STServletModule extends ServletModule {
 		
 		HashMap<String,String> initParams = new HashMap<String, String>();
 		initParams.put("javax.ws.rs.Application", com.graphsfm.stservice.STRestApplication.class.getName());
-		bind(ServletContainer.class).in(Scopes.SINGLETON);
-		serve("/rest/*").with(ServletContainer.class, initParams);
+		bind(GuiceContainer.class).in(Scopes.SINGLETON);
+		serve("/rest/*").with(GuiceContainer.class, initParams);
 	}
 }

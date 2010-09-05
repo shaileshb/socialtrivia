@@ -8,8 +8,12 @@ import javax.ws.rs.QueryParam;
 
 @Path("/sayhello")
 public class TestResource {
+	public TestResource() {
+		super();
+	}
+	
 	@GET
-	@Produces({ "application/json", "application/xml", "text/plain" })
+	@Produces({ "application/json", "application/xml" })
 	public Greeting getGreeting(
 			@QueryParam("username") @DefaultValue("world") String username) {
 		Greeting g = new Greeting();
