@@ -1,6 +1,5 @@
 package com.graphsfm.stservice.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DefaultValue;
@@ -23,9 +22,6 @@ public class QuestionsResource {
 	public List<Question> getQuestions(
 			@PathParam("userid") long userId,
 			@QueryParam("limit") @DefaultValue("8") int limit) {
-		ArrayList<Question> ret = new ArrayList<Question>();
-		ret.add(new Question(1L, "", 1L, 0L));
-		ret.add(new Question(1L, "injected value is " + triviaService, 1L, 0L));
-		return ret;
+		return triviaService.getNextQuestions(userId, limit);
 	}
 }

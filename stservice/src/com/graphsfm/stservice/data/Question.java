@@ -15,7 +15,7 @@ public class Question implements Serializable {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private long id;
+	private Long id;
 
 	@Persistent
 	private String text;
@@ -29,9 +29,8 @@ public class Question implements Serializable {
 	public Question() {
 	}
 
-	public Question(long id, String text, long userId, long creationDate) {
+	public Question(String text, long userId, long creationDate) {
 		super();
-		this.id = id;
 		this.text = text;
 		this.userId = userId;
 		this.creationDate = creationDate;

@@ -48,6 +48,9 @@
 	</path>
 	
 	<target name="war" depends="compile" description="Assemble the application directory">
+		<mkdir dir="${war.dir}/WEB-INF/classes/META-INF"/>
+		<copy todir="${war.dir}/WEB-INF/classes/META-INF" file="src/jdoconfig.xml"/>
+		
 		<mkdir dir="${war.dir}/WEB-INF"/>
 		<copy todir="${war.dir}">
 			<fileset dir="html">

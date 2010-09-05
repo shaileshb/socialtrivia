@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.ws.rs.core.Application;
 
+import com.graphsfm.stservice.resources.AddQuestionResource;
 import com.graphsfm.stservice.resources.QuestionsResource;
 import com.graphsfm.stservice.resources.TestResource;
 
@@ -23,6 +24,7 @@ public class STRestApplication extends Application {
 		
 		resources.add(TestResource.class);
 		resources.add(QuestionsResource.class);
+		resources.add(AddQuestionResource.class);
 		
 		return resources;
 	}
