@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="src/WEB-INF/lib/jersey-1.3/jersey-guice-1.3.jar"/>
 	<classpathentry kind="lib" path="src/WEB-INF/lib/jersey-1.3/jersey-server-1.3.jar"/>
 	<classpathentry kind="lib" path="/tools/appengine-java-sdk/lib/tools/orm/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="lib" path="/tools/appengine-java-sdk/lib/user/appengine-api-1.0-sdk-1.3.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

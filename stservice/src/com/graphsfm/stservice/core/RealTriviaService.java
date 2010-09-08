@@ -1,40 +1,72 @@
 package com.graphsfm.stservice.core;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
-import com.graphsfm.stservice.data.PMF;
+import com.google.inject.Inject;
 import com.graphsfm.stservice.data.Question;
+import com.graphsfm.stservice.data.QuestionState;
+import com.graphsfm.stservice.data.User;
+import com.graphsfm.stservice.guice.PersistenceManagerProvider;
 
 public class RealTriviaService implements TriviaService {
+	@Inject
+	private PersistenceManagerProvider pmp;
+
+	@Inject
+	private UserService userService;
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Question> getNextQuestions(long userid, int limit) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			@SuppressWarnings("unchecked")
-			List<Question> list = (List<Question>) pm.newQuery("select from " + Question.class.getName()).execute();
-			pm.detachCopyAll(list);
-			return list;
+		PersistenceManager pm = pmp.get();
+
+		long lastQuestionId = 0;
+		User u = userService.getUser(userid);
+		if (u != null)
+			lastQuestionId = u.getLastQuestionId();
+
+		Map<String, Object> params = null;
+		Query q = pm.newQuery(Question.class);
+		q.setFilter("state == " + QuestionState.NEW.name() + " || state == "
+				+ QuestionState.OPEN.name());
+		if (lastQuestionId > 0) {
+			params = addParam(params, "lastQuestionId", lastQuestionId);
+			q.setFilter("id > lastQuestionId");
+			q.declareParameters("long lastQuestionId");
 		}
-		finally {
-			pm.close();
-		}
+		q.setOrdering("id asc");
+		q.setRange(0, limit);
+
+		return (List<Question>) q.executeWithMap(params);
+	}
+
+	private Map<String, Object> addParam(Map<String, Object> params,
+			String name, Object value) {
+		if (params == null)
+			params = new HashMap<String, Object>();
+		params.put(name, value);
+		return params;
 	}
 
 	@Override
 	public void addQuestion(long userid, String text) {
-		Question q = new Question(text, userid, System.currentTimeMillis());
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			pm.makePersistent(q);
-		}
-		finally {
-			pm.close();
-		}
+		Question q = new Question(text, userid);
+		PersistenceManager pm = pmp.get();
+		pm.makePersistent(q);
 	}
 
 	@Override
 	public void saveAnswer(long userid, long questionId, String text) {
+		// PersistenceManager pm = pmp.get();
+		// Question q = pm.getObjectById(Question.class, userid);
+
+		// Question contains answer stats.
+		// User contains answer log. (question id, canonicalized answer
+		// text).
 	}
 }

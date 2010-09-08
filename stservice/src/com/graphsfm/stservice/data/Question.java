@@ -1,18 +1,14 @@
 package com.graphsfm.stservice.data;
 
-import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @PersistenceCapable
-@XmlRootElement
-public class Question implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class Question {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
@@ -24,23 +20,27 @@ public class Question implements Serializable {
 	private long userId;
 
 	@Persistent
-	private long creationDate;
-
+	private Date creationDate;
+	
+	@Persistent
+	private String state;
+	
 	public Question() {
 	}
 
-	public Question(String text, long userId, long creationDate) {
+	public Question(String text, long userId) {
 		super();
 		this.text = text;
 		this.userId = userId;
-		this.creationDate = creationDate;
+		this.creationDate = new Date();
+		this.state = QuestionState.NEW.name();
 	}
-
-	public long getId() {
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -60,11 +60,23 @@ public class Question implements Serializable {
 		this.userId = userId;
 	}
 
-	public long getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(long creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public QuestionState getQuestionState() {
+		return QuestionState.valueOf(state);
+	}
+
+	public String getState() {
+		return state;
+	}
+	
+	public void setState(String state) {
+		this.state = state;
 	}
 }
