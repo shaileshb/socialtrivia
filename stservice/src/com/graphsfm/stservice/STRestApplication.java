@@ -19,7 +19,6 @@ public class STRestApplication extends Application {
 
 	@Override
 	public Set<Class<?>> getClasses() {
-		log.info("STRestApplication.getClasses() called");
 		HashSet<Class<?>> resources = new HashSet<Class<?>>();
 		
 		resources.add(TestResource.class);

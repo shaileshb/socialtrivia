@@ -3,6 +3,7 @@ package com.graphsfm.stservice.core;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -14,6 +15,8 @@ import com.graphsfm.stservice.data.User;
 import com.graphsfm.stservice.guice.PersistenceManagerProvider;
 
 public class RealTriviaService implements TriviaService {
+	private static Logger log = Logger.getLogger(RealTriviaService.class.getName());
+
 	@Inject
 	private PersistenceManagerProvider pmp;
 
@@ -24,6 +27,8 @@ public class RealTriviaService implements TriviaService {
 	@Override
 	public List<Question> getNextQuestions(long userid, int limit) {
 		PersistenceManager pm = pmp.get();
+		
+		log.info("getNextQuestions: pm = " + pm.toString());
 
 		long lastQuestionId = 0;
 		User u = userService.getUser(userid);
@@ -58,6 +63,8 @@ public class RealTriviaService implements TriviaService {
 		Question q = new Question(text, userid);
 		PersistenceManager pm = pmp.get();
 		pm.makePersistent(q);
+
+		log.info("addQuestion: pm = " + pm.toString());
 	}
 
 	@Override
