@@ -16,7 +16,7 @@ import com.graphsfm.stservice.core.TriviaService;
 import com.graphsfm.stservice.data.Question;
 import com.graphsfm.stservice.resources.data.QuestionInfo;
 
-@Path("/user/{userid}/questions")
+@Path("/user/{userkey}/questions")
 public class QuestionsResource {
 	private static Logger log = Logger.getLogger(QuestionsResource.class.getName());
 	private TriviaService triviaService;
@@ -29,11 +29,11 @@ public class QuestionsResource {
 	@GET
 	@Produces({ "application/json", "application/xml" })
 	public List<QuestionInfo> getQuestions(
-			@PathParam("userid") long userId,
+			@PathParam("userkey") String userkey,
 			@QueryParam("limit") @DefaultValue("8") int limit) {
-		List<Question> qlist = triviaService.getNextQuestions(userId, limit);
+		List<Question> qlist = triviaService.getNextQuestions(userkey, limit);
 		if (qlist == null || qlist.size() == 0) {
-			log.warning("Could not fetch any questions for userid = " + userId);
+			log.warning("Could not fetch any questions for userid = " + userkey);
 			return null;
 		}
 		List<QuestionInfo> ret = new ArrayList<QuestionInfo>();

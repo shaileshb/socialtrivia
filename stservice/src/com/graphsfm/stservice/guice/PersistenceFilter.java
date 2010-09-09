@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 public class PersistenceFilter implements Filter {
+	@SuppressWarnings("unused")
 	private static Logger log = Logger.getLogger(PersistenceFilter.class.getName());
 	
 	@Inject
@@ -29,7 +30,6 @@ public class PersistenceFilter implements Filter {
 			PersistenceManager pm = injector.getInstance(PersistenceManager.class);
 			if (pm != null)
 				pm.close();
-			log.info("closed pm instance: " + pm.toString());
 		}
 	}
 

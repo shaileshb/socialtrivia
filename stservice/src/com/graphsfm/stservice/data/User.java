@@ -6,12 +6,18 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 @PersistenceCapable
 public class User {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
+
+	@Persistent
+	private String userkey; // APIs use this value as the primary user
+							// identifier
 
 	@Persistent
 	private String nick;
@@ -31,6 +37,14 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getUserkey() {
+		return userkey;
+	}
+
+	public void setUserkey(String userkey) {
+		this.userkey = userkey;
 	}
 
 	public String getNick() {
@@ -55,5 +69,12 @@ public class User {
 
 	public void setLastCheckinTime(Date lastCheckinTime) {
 		this.lastCheckinTime = lastCheckinTime;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userkey=" + userkey + ", nick=" + nick
+				+ ", lastQuestionId=" + lastQuestionId + ", lastCheckinTime="
+				+ lastCheckinTime + "]";
 	}
 }

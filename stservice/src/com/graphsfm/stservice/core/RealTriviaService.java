@@ -25,13 +25,13 @@ public class RealTriviaService implements TriviaService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Question> getNextQuestions(long userid, int limit) {
+	public List<Question> getNextQuestions(String userkey, int limit) {
 		PersistenceManager pm = pmp.get();
 		
 		log.info("getNextQuestions: pm = " + pm.toString());
 
 		long lastQuestionId = 0;
-		User u = userService.getUser(userid);
+		User u = userService.getUser(userkey);
 		if (u != null)
 			lastQuestionId = u.getLastQuestionId();
 
@@ -40,7 +40,7 @@ public class RealTriviaService implements TriviaService {
 		q.setFilter("state == " + QuestionState.NEW.name() + " || state == "
 				+ QuestionState.OPEN.name());
 		if (lastQuestionId > 0) {
-			params = addParam(params, "lastQuestionId", lastQuestionId);
+			params = addQueryParam(params, "lastQuestionId", lastQuestionId);
 			q.setFilter("id > lastQuestionId");
 			q.declareParameters("long lastQuestionId");
 		}
@@ -50,7 +50,7 @@ public class RealTriviaService implements TriviaService {
 		return (List<Question>) q.executeWithMap(params);
 	}
 
-	private Map<String, Object> addParam(Map<String, Object> params,
+	private Map<String, Object> addQueryParam(Map<String, Object> params,
 			String name, Object value) {
 		if (params == null)
 			params = new HashMap<String, Object>();
