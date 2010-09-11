@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
 	public void saveAnswer(String uid, String qid, String answer) {
 		User u = getUser(uid);
 		Question q = triviaService.getQuestion(qid);
+		u.setLastQuestionKey(q.getId());
 		u.addResponse(q, answer);
 	}
 }

@@ -27,7 +27,7 @@ public class User {
 	private String nick;
 
 	@Persistent
-	private long lastQuestionId;
+	private Key lastQuestionKey;
 
 	@Persistent
 	private Date lastCheckinTime;
@@ -63,12 +63,12 @@ public class User {
 		this.nick = nick;
 	}
 
-	public long getLastQuestionId() {
-		return lastQuestionId;
+	public Key getLastQuestionKey() {
+		return lastQuestionKey;
 	}
 
-	public void setLastQuestionId(long lastQuestionId) {
-		this.lastQuestionId = lastQuestionId;
+	public void setLastQuestionKey(Key lastQuestionKey) {
+		this.lastQuestionKey = lastQuestionKey;
 	}
 
 	public Date getLastCheckinTime() {

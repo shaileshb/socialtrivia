@@ -93,7 +93,7 @@
 		<dev_appserver war="${war.dir}" port="${http.port}">
 			<options>
 				<arg value="--jvm_flag=-Xdebug"/>
-				<arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=${debug.port}"/>
+				<arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}"/>
 			</options>
 		</dev_appserver>
 	</target>

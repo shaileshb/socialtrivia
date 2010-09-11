@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.inject.Inject;
 import com.graphsfm.stservice.data.Question;
 import com.graphsfm.stservice.data.QuestionState;
@@ -30,16 +31,16 @@ public class RealTriviaService implements TriviaService {
 		
 		log.info("getNextQuestions: pm = " + pm.toString());
 
-		long lastQuestionId = 0;
+		Key lastQuestionId = null;
 		User u = userService.getUser(uid);
 		if (u != null)
-			lastQuestionId = u.getLastQuestionId();
+			lastQuestionId = u.getLastQuestionKey();
 
 		Map<String, Object> params = null;
 		Query q = pm.newQuery(Question.class);
 		q.setFilter("state == " + QuestionState.NEW.name() + " || state == "
 				+ QuestionState.OPEN.name());
-		if (lastQuestionId > 0) {
+		if (lastQuestionId != null) {
 			params = addQueryParam(params, "lastQuestionId", lastQuestionId);
 			q.setFilter("id > lastQuestionId");
 			q.declareParameters("long lastQuestionId");
