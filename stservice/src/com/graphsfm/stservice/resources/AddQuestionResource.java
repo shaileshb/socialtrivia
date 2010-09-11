@@ -10,14 +10,18 @@ import com.graphsfm.stservice.core.TriviaService;
 
 @Path("/question")
 public class AddQuestionResource {
-	@Inject
-	TriviaService triviaService;
+	private TriviaService triviaService;
 
+	@Inject
+	public void setTriviaService(TriviaService triviaService) {
+		this.triviaService = triviaService;
+	}
+	
 	@PUT
 	@Produces({ "application/json", "application/xml" })
 	public void addQuestion(
 			@FormParam("text") String text,
-			@FormParam("userid") long userid) {
-		triviaService.addQuestion(userid, text);
+			@FormParam("uid") String uid) {
+		triviaService.addQuestion(uid, text);
 	}
 }

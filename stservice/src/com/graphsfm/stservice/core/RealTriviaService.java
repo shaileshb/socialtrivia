@@ -25,13 +25,13 @@ public class RealTriviaService implements TriviaService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Question> getNextQuestions(String userkey, int limit) {
+	public List<Question> getNextQuestions(String uid, int limit) {
 		PersistenceManager pm = pmp.get();
 		
 		log.info("getNextQuestions: pm = " + pm.toString());
 
 		long lastQuestionId = 0;
-		User u = userService.getUser(userkey);
+		User u = userService.getUser(uid);
 		if (u != null)
 			lastQuestionId = u.getLastQuestionId();
 
@@ -59,21 +59,31 @@ public class RealTriviaService implements TriviaService {
 	}
 
 	@Override
-	public void addQuestion(long userid, String text) {
-		Question q = new Question(text, userid);
+	public void addQuestion(String uid, String text) {
+		User u = userService.getUser(uid);
+		if (u == null)
+			return;
+		
+		Question q = new Question(text, u.getId());
 		PersistenceManager pm = pmp.get();
 		pm.makePersistent(q);
-
-		log.info("addQuestion: pm = " + pm.toString());
+		q.setQid(Long.toString(System.currentTimeMillis() / 1000) + "-" + q.getId().getId());
 	}
-
+	
+	public Question getQuestion(String qid) {
+		if (qid == null || qid.length() == 0)
+			return null;
+		PersistenceManager pm = pmp.get();
+		Query q = pm.newQuery(Question.class);
+		q.setFilter("qid == keyvalue");
+		q.declareParameters("String keyvalue");
+		q.setUnique(true);
+		return (Question) q.execute(qid);
+	}
+	
 	@Override
-	public void saveAnswer(long userid, long questionId, String text) {
-		// PersistenceManager pm = pmp.get();
-		// Question q = pm.getObjectById(Question.class, userid);
-
-		// Question contains answer stats.
-		// User contains answer log. (question id, canonicalized answer
-		// text).
+	public void saveAnswer(String uid, String qid, String text) {
+		Question q = getQuestion(qid);
+		q.addResponse(text);
 	}
 }

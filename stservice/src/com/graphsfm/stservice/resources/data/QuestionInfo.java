@@ -3,18 +3,21 @@ package com.graphsfm.stservice.resources.data;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.graphsfm.stservice.data.Question;
+import com.graphsfm.stservice.data.User;
 
 @XmlRootElement
 public class QuestionInfo {
 	private Question question;
+	private User sender;
 	private String[] hints;
 	private int[] counts;
 	
 	public QuestionInfo() {
 	}
 
-	public QuestionInfo(Question q) {
+	public QuestionInfo(Question q, User sender) {
 		this.question = q;
+		this.sender = sender;
 	}
 
 	public Question getQuestion() {
@@ -23,6 +26,14 @@ public class QuestionInfo {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
 	public String[] getHints() {

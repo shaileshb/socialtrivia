@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import com.graphsfm.stservice.core.UserService;
 import com.graphsfm.stservice.data.User;
 
-@Path("/user/{userkey}")
+@Path("/user/{uid}")
 public class UserResource {
 	private UserService userService;
 
@@ -22,8 +22,8 @@ public class UserResource {
 	
 	@GET
 	@Produces({ "application/json", "application/xml" })
-	public User getUser(@PathParam("userkey") String userkey) {
-		User u = userService.getUser(userkey);
+	public User getUser(@PathParam("uid") String uid) {
+		User u = userService.getUser(uid);
 		if (u == null)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		return u;
