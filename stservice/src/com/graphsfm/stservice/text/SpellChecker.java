@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -33,6 +34,23 @@ public class SpellChecker {
 	}
 	
 	public void init(String...fnames) {
+		for (String fname : fnames) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(fname));
+				while (true) {
+					String str = br.readLine();
+					if (str == null)
+						break;
+					countWordFrequencies(str, words);
+				}
+			} catch (IOException e) {
+				log.log(Level.WARNING, "Error: " + fname, e);
+			}
+			finally {}
+		}
+	}
+	
+	public void _init(String...fnames) {
 		for (String fname : fnames) {
 			try {
 				File f = new File(fname);
