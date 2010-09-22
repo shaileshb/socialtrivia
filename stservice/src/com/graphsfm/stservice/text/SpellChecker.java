@@ -1,9 +1,6 @@
 package com.graphsfm.stservice.text;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,7 +20,7 @@ public class SpellChecker {
 	private void countWordFrequencies(String mstr, HashMap<String,Integer> model) {
 		String[] tokens = mstr.split("[^a-zA-Z]+");
 		for (String t : tokens) {
-			t = t.toLowerCase();
+			t = new String(t.toLowerCase());
 			Integer count = model.get(t);
 			if (count == null)
 				count = 1;
@@ -33,7 +30,33 @@ public class SpellChecker {
 		}
 	}
 	
-	public void init(String...fnames) {
+	public void initFromMap(String... fnames) {
+		for (String fname : fnames) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(fname));
+				while (true) {
+					String str = br.readLine();
+					if (str == null)
+						break;
+					String[] tokens = str.split("\\s*");
+					if (tokens.length != 2) {
+						log.warning("Could not parse line: " + str);
+						continue;
+					}
+					Integer count = words.get(tokens[1]);
+					if (count == null)
+						words.put(tokens[1], Integer.parseInt(tokens[0]));
+					else
+						words.put(tokens[1], count + Integer.parseInt(tokens[0]));
+				}
+			} catch (IOException e) {
+				log.log(Level.WARNING, "Error: " + fname, e);
+			}
+			finally {}
+		}
+	}
+	
+	public void initFromText(String...fnames) {
 		for (String fname : fnames) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(fname));
@@ -47,25 +70,6 @@ public class SpellChecker {
 				log.log(Level.WARNING, "Error: " + fname, e);
 			}
 			finally {}
-		}
-	}
-	
-	public void _init(String...fnames) {
-		for (String fname : fnames) {
-			try {
-				File f = new File(fname);
-				if (f.exists() && f.length() > 0) {
-					byte[] buffer = new byte[(int) f.length()];
-					FileInputStream is = new FileInputStream(f);
-					is.read(buffer);
-					String fstr = new String(buffer);
-					countWordFrequencies(fstr, words);
-				}
-			} catch (FileNotFoundException e) {
-				log.log(Level.WARNING, "File not found: " + fname, e);
-			} catch (IOException e) {
-				log.log(Level.WARNING, "Error: " + fname, e);
-			}
 		}
 	}
 	
@@ -166,30 +170,12 @@ public class SpellChecker {
 		return correct(in, words);
 	}
 	
-//	public String correct(String[] localText, String in) {
-//		HashMap<String,Integer> localModel = new HashMap<String, Integer>();
-//		if (localText != null) {
-//			for (String str : localText) {
-//				countWordFrequencies(str, localModel);
-//			}
-//		}
-//		
-//		StringBuilder sb = new StringBuilder();
-//		in = in.toLowerCase();
-//		String[] iwords = in.split("\\s+");
-//		for (String iword : iwords) {
-//			if (localModel.containsKey(iword)) {
-//				if (sb.length() > 0)
-//					sb.append(' ');
-//				sb.append(iword);
-//			}
-//		}
-//		return in;
-//	}
-//	
 	public static void main(String...args) throws Exception {
 		SpellChecker m = new SpellChecker();
-		m.init(args[0]);
+		if (args[0].equals("-t"))
+			m.initFromText(args[1]);
+		else
+			m.initFromMap(args[0]);
 		
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
