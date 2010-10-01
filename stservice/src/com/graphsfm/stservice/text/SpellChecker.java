@@ -38,9 +38,9 @@ public class SpellChecker {
 					String str = br.readLine();
 					if (str == null)
 						break;
-					String[] tokens = str.split("\\s*");
+					String[] tokens = str.split("\\s+");
 					if (tokens.length != 2) {
-						log.warning("Could not parse line: " + str);
+						log.warning("Could not parse line: " + str + ", tokens.length = " + tokens.length);
 						continue;
 					}
 					Integer count = words.get(tokens[1]);
@@ -177,6 +177,7 @@ public class SpellChecker {
 		else
 			m.initFromMap(args[0]);
 		
+		System.out.println("Ready. Enter text: ");
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
 			String s = r.readLine();
