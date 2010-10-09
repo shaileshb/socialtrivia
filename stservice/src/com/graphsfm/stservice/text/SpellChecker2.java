@@ -77,7 +77,11 @@ public class SpellChecker2 {
                                              // candidates - i.e. valid
                                              // mutations of input[i]
         for (int i = 0; i < n; i++) {
-            HashSet<String> cset = dict.mutate2(input[i]);
+            HashSet<String> cset;
+            if (input[i].length() <= 4)
+                cset = dict.mutate1(input[i]);
+            else
+                cset = dict.mutate2(input[i]);
             if (cset.size() == 0)
                 cset.add(input[i]);
             clists[i] = cset.toArray(new String[0]);
@@ -86,11 +90,11 @@ public class SpellChecker2 {
         int[] ilist = new int[n]; // ilist[i] is the loop variable for clists[i]
         ArrayList<Long>[] poslists = new ArrayList[n];
         while (true) {
-            System.out.print("-- ");
-            for (int j = 0; j < n; j++) {
-                System.out.print(clists[j][ilist[j]] + " ");
-            }
-            System.out.println();
+//            System.out.print("-- ");
+//            for (int j = 0; j < n; j++) {
+//                System.out.print(clists[j][ilist[j]] + " ");
+//            }
+//            System.out.println();
             
             // generate a permutation of words in clists.
             boolean alldone = true;
@@ -112,6 +116,12 @@ public class SpellChecker2 {
             // if (findSeq(poslists) != null) {
             // }
         }
+        
+        int total = 1;
+        for (int j = 0; j < n; j++) {
+            total *= clists[j].length;
+        }
+        System.out.println("total = " + total);
         return null;
     }
 

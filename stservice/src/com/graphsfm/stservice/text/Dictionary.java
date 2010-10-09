@@ -98,4 +98,13 @@ public class Dictionary {
         }
         return mset;
     }
+    
+    public boolean contains(String str) {
+        return dict.containsKey(str);
+    }
+    
+    public int getFrequency(String word) {
+        Integer f = dict.get(word);
+        return f != null ? f : 0;
+    }
 }
