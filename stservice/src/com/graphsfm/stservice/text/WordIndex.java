@@ -11,9 +11,14 @@ import java.util.logging.Logger;
 
 public class WordIndex {
     private static Logger log = Logger.getLogger(Dictionary.class.getName());
-    private HashMap<String, ArrayList<Long>> idx = new HashMap<String, ArrayList<Long>>();
+    private HashMap<String, ArrayList<FilePositions>> idx = new HashMap<String, ArrayList<FilePositions>>();
     private Dictionary dict = Dictionary.getInstance();
     private static WordIndex instance = new WordIndex();
+    
+    class FilePositions {
+        String fileid;
+        ArrayList<Long> poslist;
+    }
     
     private WordIndex() {
         log.info("loading WordIndex");
@@ -25,7 +30,7 @@ public class WordIndex {
         return instance;
     }
 
-    public void addWord(String str, long pos) {
+    public void addWord(String str, String fileid, long pos) {
         /*
          * Filter out certain strings. e.g. words that are either very rare
          * (e.g. spelling mistakes) or extremely common "stop words".
@@ -37,19 +42,30 @@ public class WordIndex {
         if (freq == 0 || freq > 90000)
             return;
         
-        ArrayList<Long> poslist = idx.get(str);
-        if (poslist == null) {
-            poslist = new ArrayList<Long>();
-            idx.put(str, poslist);
+        ArrayList<FilePositions> fplist = idx.get(str);
+        if (fplist == null) {
+            fplist = new ArrayList<FilePositions>();
+            idx.put(str, fplist);
         }
-        poslist.add(pos);
+
+        if (fplist.size() == 0 || 
+                ! fplist.get(fplist.size() - 1).fileid.equals(fileid)) {
+            FilePositions fp = new FilePositions();
+            fp.fileid = fileid;
+            fp.poslist = new ArrayList<Long>();
+            fplist.add(fp);
+        }
+        fplist.get(fplist.size() - 1).poslist.add(pos);
     }
     
     private void writeMap() {
-        for (Map.Entry<String, ArrayList<Long>> e : idx.entrySet()) {
+        for (Map.Entry<String, ArrayList<FilePositions>> e : idx.entrySet()) {
             System.out.print(e.getKey());
-            for (Long pos : e.getValue()) {
-                System.out.print(" " + pos);
+            for (FilePositions fp : e.getValue()) {
+                System.out.print(" " + fp.fileid);
+                for (Long pos : fp.poslist)
+                    System.out.print(" " + pos);
+                System.out.print(" . ");
             }
             System.out.println();
         }
@@ -69,7 +85,7 @@ public class WordIndex {
                     String[] tokens = str.split("[^a-zA-Z]+");
                     for (String t : tokens) {
                         t = new String(t.toLowerCase());
-                        addWord(t, pos++);
+                        addWord(t, fname, pos++);
                     }
                 }
             } catch (IOException e) {
