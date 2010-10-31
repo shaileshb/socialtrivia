@@ -9,8 +9,8 @@ $ROOT/tools
 android-sdk setup
 -----------------
 
-$ jar xvf /home/shailesh/Downloads/appengine-java-sdk-1.3.7.zip 
-$ mv appengine-java-sdk-1.3.7 appengine-java-sdk
+$ jar xvf /home/shailesh/Downloads/appengine-java-sdk-1.3.8.zip 
+$ mv appengine-java-sdk-1.3.8 appengine-java-sdk
 
 $ tar xvzf ~/Downloads/android-sdk_r06-linux_86.tgz
 $ mv android-sdk-linux_86/ android-sdk
