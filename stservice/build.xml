@@ -1,5 +1,5 @@
 <project name="stservice" default="war">
-	<property name="appengine.sdk" location="../tools/appengine-java-sdk-1.3.8"/>
+	<property name="appengine.sdk" location="../tools/appengine-java-sdk"/>
 	<import file="${appengine.sdk}/config/user/ant-macros.xml"/>
 
 	<!-- Remote debug port for dev_appserver -->
