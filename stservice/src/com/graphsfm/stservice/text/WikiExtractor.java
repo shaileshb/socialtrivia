@@ -1,7 +1,10 @@
 package com.graphsfm.stservice.text;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -32,23 +35,13 @@ public class WikiExtractor {
             "\\[\\[([^\\]]*?\\|)?(.*?)\\]\\]", Pattern.DOTALL);
 
     private XMLStreamReader reader;
-    private String outdir;
+    private DataOutputStream outstream;
 
-    public WikiExtractor(String outdir, String fname) throws IOException,
+    public WikiExtractor(String infile, String outfile) throws IOException,
             XMLStreamException {
-        File d = new File(outdir);
-        if (! d.exists()) {
-            System.err.printf("Target directory %s does not exist.", outdir);
-            throw new IOException("Output Directory Not Found");
-        }
-        if (! d.isDirectory()) {
-            System.err.printf("Target %s is not a directory.", outdir);
-            throw new IOException("Output Directory Not Found");
-        }
-        
         XMLInputFactory f = XMLInputFactory.newInstance();
-        reader = f.createXMLStreamReader(new FileInputStream(fname));
-        this.outdir = outdir;
+        reader = f.createXMLStreamReader(new FileInputStream(infile));
+        this.outstream = new DataOutputStream(new FileOutputStream(outfile));
     }
 
     public String findElement(String[] names) {
@@ -141,61 +134,26 @@ public class WikiExtractor {
         }
     }
 
-    private void writeFile(String title, String text) {
-        try {
-            if (title.length() == 0) {
-                System.err.printf("title not found. text: ...",
-                        text.subSequence(0, 20));
-                return;
-            }
-            
-            if (! TEXT_PATTERN.matcher(text).matches())
-                return;
-            
-            title = title.replaceAll("[^a-zA-Z]", "_");
-            
-            StringBuilder sb = new StringBuilder();
-            char c0 = title.charAt(0);
-            char c1 = (title.length() > 1 ? title.charAt(1) : '_');
-            char c2 = (title.length() > 2 ? title.charAt(2) : '_');
-            
-            sb.append(outdir).append(File.separator);
-            sb.append(c0).append(File.separator);
-            sb.append(c1).append(File.separator);
-            sb.append(c2).append(File.separator);
-            
-            File d = new File(sb.toString());
-            d.mkdirs();
-
-            File f = new File(d, title);
-            f.createNewFile();
-            
-            FileWriter fw = new FileWriter(f);
-            fw.write(text);
-            fw.flush();
-            fw.close();
-        } catch (IOException e) {
-            System.err.printf("Could not write %s: %s", title, e.toString());
-            throw new RuntimeException(e);
-        }
+    private void writeFile(long fileid, String text) throws IOException {
+        if (! TEXT_PATTERN.matcher(text).matches())
+            return;
+        
+        outstream.writeLong(fileid);
+        byte[] bytes = text.getBytes();
+        outstream.writeLong(bytes.length);
+        outstream.write(bytes);
     }
-
-    public void process() throws XMLStreamException {
+    
+    public void process() throws XMLStreamException, IOException {
         long len = 0;
         long last = 0;
+        long fileid = 1;
         while (true) {
-            String e = findElement(PAGE_TITLE);
-            if (e == null)
-                break;
-            String title = getTitleText();
-
-            e = findElement(TEXT_START);
+            String e = findElement(TEXT_START);
             if (e == null)
                 break;
             String t = getText();
-
-            writeFile(title, t);
-            // System.out.println(t);
+            writeFile(fileid++, t);
 
             len += t.length();
             if (len > last + 1024 * 1024) {
