@@ -1,11 +1,8 @@
 package com.graphsfm.stservice.text;
 
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +12,11 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+/**
+ * Extracts the text from wikipedia dump and writes the output to an intermediate file.
+ *  
+ * @author shaileshb
+ */
 public class WikiExtractor {
     private static final String[] TEXT_START = { "text" };
     private static final String[] PAGE_TITLE = { "title" };
