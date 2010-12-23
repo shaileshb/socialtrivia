@@ -1,0 +1,17 @@
+
+nclusters = 3
+input = str1, str2, str3, ..., strN
+
+
+* initial guess = [str1, str2, str3]
+* assign each input string to one of the cluster based on proximity to the centers.
+* recompute the guess -
+  . find the top 10% common words in each clusters = [str1, str2, str3]
+  . update guesses.
+  . repeat until stable clusters are formed.
+  . not sure if this will converge. hence limit the max iterations to a reasonable number.
+
+
+
+
+
