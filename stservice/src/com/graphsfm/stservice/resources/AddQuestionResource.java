@@ -1,5 +1,7 @@
 package com.graphsfm.stservice.resources;
 
+import java.util.Set;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,7 +23,8 @@ public class AddQuestionResource {
 	@Produces({ "application/json", "application/xml" })
 	public void addQuestion(
 			@FormParam("text") String text,
-			@FormParam("uid") String uid) {
-		triviaService.addQuestion(uid, text);
+			@FormParam("uid") String uid,
+			@FormParam("options") Set<String> options) {
+		triviaService.addQuestion(text, uid, options);
 	}
 }

@@ -3,6 +3,7 @@ package com.graphsfm.stservice.core;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -60,12 +61,12 @@ public class RealTriviaService implements TriviaService {
 	}
 
 	@Override
-	public void addQuestion(String uid, String text) {
+	public void addQuestion(String uid, String text, Set<String> options) {
 		User u = userService.getUser(uid);
 		if (u == null)
 			return;
 		
-		Question q = new Question(text, u.getId());
+		Question q = new Question(u.getId(), text, options);
 		PersistenceManager pm = pmp.get();
 		pm.makePersistent(q);
 		q.setQid(Long.toString(System.currentTimeMillis() / 1000) + "-" + q.getId().getId());

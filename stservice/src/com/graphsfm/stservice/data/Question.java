@@ -25,6 +25,9 @@ public class Question {
 	private String text;
 
 	@Persistent
+	private Set<String> options;
+
+	@Persistent
 	private Key userfk;
 
 	@Persistent
@@ -39,10 +42,11 @@ public class Question {
 	public Question() {
 	}
 
-	public Question(String text, Key userfk) {
+	public Question(Key userfk, String text, Set<String> options) {
 		super();
 		this.text = text;
 		this.userfk = userfk;
+		this.options = options;
 		this.creationDate = new Date();
 		this.state = QuestionState.NEW.name();
 	}
@@ -72,6 +76,13 @@ public class Question {
 		this.text = text;
 	}
 
+	public Set<String> getOptions() {
+		return options;
+	}
+
+	public void setOptionst(Set<String> options) {
+		this.options = options;
+	}
 	@XmlTransient
 	public Key getUserfk() {
 		return userfk;

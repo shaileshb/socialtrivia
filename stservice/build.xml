@@ -16,16 +16,17 @@
 
 	<!-- Change if you like e.g. "war" better than "www" for the output -->
 	<property name="war.dir" location="bin/war"/>
-	
+        <property name="http.address" value="192.168.0.101"/>	
 	<path id="javac.classpath">
 		<pathelement location="src/WEB-INF/lib/jersey-1.3/jsr311-api-1.1.1.jar"/>
 		<pathelement location="src/WEB-INF/lib/jersey-1.3/jersey-server-1.3.jar"/>
 		<pathelement location="src/WEB-INF/lib/jersey-1.3/jersey-guice-1.3.jar"/>
 		<pathelement location="src/WEB-INF/lib/guice-2.0/guice-2.0.jar"/>
 		<pathelement location="src/WEB-INF/lib/guice-2.0/guice-servlet-2.0.jar"/>
-		<pathelement location="${appengine.sdk}/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
+		<pathelement location="${appengine.sdk}/lib/shared/servlet-api.jar"/>
 		<pathelement location="${appengine.sdk}/lib/user/orm/jdo2-api-2.3-eb.jar" />
-		<pathelement location="${appengine.sdk}/lib/user/appengine-api-1.0-sdk-1.3.8.jar" />
+		<pathelement location="${appengine.sdk}/lib/user/appengine-api-1.0-sdk-1.4.2.jar" />
+		
 	</path>
 	
 	<target name="compile" description="Compile the application servlet code">
@@ -44,15 +45,14 @@
 		
 		<fileset dir="${appengine.sdk}/lib/user">
 			<include name="orm/*.jar" />
-			<include name="appengine-api-1.0-sdk-1.3.8.jar" />
+			<include name="appengine-api-1.0-sdk-1.4.2.jar" />
 		</fileset>
 	</path>
 	
 	<target name="war" depends="compile" description="Assemble the application directory">
 		<mkdir dir="${war.dir}/WEB-INF/classes/META-INF"/>
 		<copy todir="${war.dir}/WEB-INF/classes/META-INF" file="src/jdoconfig.xml"/>
-		
-		<mkdir dir="${war.dir}/WEB-INF"/>
+		<!-- <mkdir dir="${war.dir}/WEB-INF"/> -->
 		<copy todir="${war.dir}">
 			<fileset dir="html">
 				<exclude name="**/.svn/**"/>
@@ -67,18 +67,34 @@
 		<copy todir="${war.dir}/WEB-INF/lib" flatten="true">
 			<path refid="deploy.libs" />
 		</copy>
-		
 		<enhance_war war="${war.dir}"/>
 	</target>
 
-	<target name="clean"
-          description="Force a clean slate to rebuild">
-		<delete dir="${war.dir}"/>
+	<target name="war.devel" depends="compile" description="Assemble the application directory">
+		<mkdir dir="${war.dir}/WEB-INF/classes/META-INF"/>
+		<symlink link="${war.dir}/html" resource="../../html" failonerror="false"/>
+		<copy todir="${war.dir}/WEB-INF/classes/META-INF" file="src/jdoconfig.xml"/>
+		<copy todir="${war.dir}/WEB-INF">
+			<fileset dir="src/WEB-INF">
+				<include name="*.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${war.dir}/WEB-INF/lib" flatten="true">
+			<path refid="deploy.libs" />
+		</copy>
+		<enhance_war war="${war.dir}"/>
 	</target>
 
-	<target name="runserver" depends="war"
+	<target name="clean" description="Force a clean slate to rebuild">
+		<delete includeEmptyDirs="true"> 
+		  <fileset followsymlinks="false" dir="${war.dir}">
+		  </fileset>
+		</delete>
+	</target>
+
+	<target name="runserver" depends="war.devel"
           description="Run the dev_appserver">
-		<dev_appserver war="${war.dir}" port="${http.port}"/>
+		<dev_appserver address="${http.address}" war="${war.dir}" port="${http.port}"/>
 	</target>
 
 	<target name="dev_appserver" depends="runserver"/>
@@ -92,6 +108,7 @@
 		<echo message="Launching dev_appserver on Web port ${http.port}, Java remote debug port ${debug.port}"/>
 		<dev_appserver war="${war.dir}" port="${http.port}">
 			<options>
+				<arg value="-a=192.168.0.101"/>
 				<arg value="--jvm_flag=-Xdebug"/>
 				<arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}"/>
 			</options>

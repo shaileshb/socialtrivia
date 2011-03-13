@@ -8,7 +8,7 @@ $ROOT/tools
 
 android-sdk setup
 -----------------
-
+$ cd tools
 $ jar xvf /home/shailesh/Downloads/appengine-java-sdk-1.3.8.zip 
 $ mv appengine-java-sdk-1.3.8 appengine-java-sdk
 
