@@ -22,9 +22,9 @@ public class AddQuestionResource {
 	@PUT
 	@Produces({ "application/json", "application/xml" })
 	public void addQuestion(
-			@FormParam("text") String text,
 			@FormParam("uid") String uid,
+			@FormParam("text") String text,
 			@FormParam("options") Set<String> options) {
-		triviaService.addQuestion(text, uid, options);
+		triviaService.addQuestion(uid, text, options);
 	}
 }

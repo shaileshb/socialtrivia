@@ -3,27 +3,28 @@ $(document).ready(function() {
 
 	var uid;
 	
-    $("createquestion").click(function() {
+    $("#createquestion").click(function() {
 
-        alert("inside the question");
-           
-        var question = {"text" : "My question",
-        				"uid" : uid,
-        				"options": "this is my option", 
+        
+        options = [$("#option1").val(),$("#option2").val(), $("#option3").val()];  
+        question = $("question").val();
+         
+        var question = {"text" : question,
+        				"uid" : '1300034181-1',
+        				"options": options, 
                         };
             
      
         $.ajax({
            url: "http://192.168.0.101:8080/rest/question",
-           async:true,
+           async:false,
            type: "PUT",
-           crossDomain: true,
-           dataType: "jsonp",
+           dataType: "json",
            data: question,
           success: function(){
             alert("inside success");
           },
-          failure: function() {
+          failure: function(data ) {
             alert("inside failure");
           },
           error: function() {
@@ -41,7 +42,7 @@ $(document).ready(function() {
            dataType: "json",
            
           success: function(data){
-           alert("inside success");
+           
             alert(data.uid);
             uid=data.uid;
             
