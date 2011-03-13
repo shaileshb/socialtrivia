@@ -14,4 +14,52 @@ input = str1, str2, str3, ..., strN
 
 
 
+--------------------------------------------------------
+
+* distance(str1, str2):
+  - tokenize
+  - unmatched word: +1 * Weight(str)
+
+Weight:
+
+["pacific", "pacific ocean", "the pacific", "ocean", "atlantic", ...]
+
+"pacific"
+
+
+
+which is the deepest ocean?
+
+pacific ocean
+pacific:  +1 +1 -1
+ocean: +1 +1 -1
+
+
+
+
+
+
+
+
+mount everest
+indian ocean
+
+
+the pacific ocean
+
+pacific
+the pacific
+ocean
+atlantic
+lake baikal
+mount everest
+
+
+ocean +1
+pacific
+atlantic
+the
+
+
+
 
