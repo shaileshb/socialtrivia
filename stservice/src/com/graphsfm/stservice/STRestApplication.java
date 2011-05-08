@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
 
 import com.graphsfm.stservice.resources.AddQuestionResource;
+import com.graphsfm.stservice.resources.MediaClipResource;
 import com.graphsfm.stservice.resources.CreateUserResource;
 import com.graphsfm.stservice.resources.QuestionsResource;
 import com.graphsfm.stservice.resources.TestResource;
@@ -30,6 +31,7 @@ public class STRestApplication extends Application {
 		resources.add(CreateUserResource.class);
 		resources.add(UserResource.class);
 		resources.add(UserResponseResource.class);
+		resources.add(MediaClipResource.class);
 		
 		return resources;
 	}

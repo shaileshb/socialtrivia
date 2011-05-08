@@ -16,7 +16,7 @@
 
 	<!-- Change if you like e.g. "war" better than "www" for the output -->
 	<property name="war.dir" location="bin/war"/>
-        <property name="http.address" value="192.168.0.101"/>	
+        <property name="http.address" value="0.0.0.0"/>
 	<path id="javac.classpath">
 		<pathelement location="src/WEB-INF/lib/jersey-1.3/jsr311-api-1.1.1.jar"/>
 		<pathelement location="src/WEB-INF/lib/jersey-1.3/jersey-server-1.3.jar"/>
@@ -25,7 +25,7 @@
 		<pathelement location="src/WEB-INF/lib/guice-2.0/guice-servlet-2.0.jar"/>
 		<pathelement location="${appengine.sdk}/lib/shared/servlet-api.jar"/>
 		<pathelement location="${appengine.sdk}/lib/user/orm/jdo2-api-2.3-eb.jar" />
-		<pathelement location="${appengine.sdk}/lib/user/appengine-api-1.0-sdk-1.4.2.jar" />
+		<pathelement location="${appengine.sdk}/lib/user/appengine-api-1.0-sdk-1.4.3.jar" />
 		
 	</path>
 	
@@ -45,7 +45,7 @@
 		
 		<fileset dir="${appengine.sdk}/lib/user">
 			<include name="orm/*.jar" />
-			<include name="appengine-api-1.0-sdk-1.4.2.jar" />
+			<include name="appengine-api-1.0-sdk-1.4.3.jar" />
 		</fileset>
 	</path>
 	
