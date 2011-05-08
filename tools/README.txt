@@ -1,16 +1,16 @@
 
-This folder contains external components. Download and extract the Android SDK and app engine to create the following structure:
+This folder contains external components. Download and extract the Android SDK
+and Google App Engine 1.4.3 to create the following structure:
 
 $ROOT/tools
 	android-sdk
-	appengine-java-sdk
+	appengine-java-sdk-1.4.3
 
 
 android-sdk setup
 -----------------
 $ cd tools
-$ jar xvf /home/shailesh/Downloads/appengine-java-sdk-1.3.8.zip 
-$ mv appengine-java-sdk-1.3.8 appengine-java-sdk
+$ jar xvf /home/shailesh/Downloads/appengine-java-sdk-1.4.3.zip 
 
 $ tar xvzf ~/Downloads/android-sdk_r06-linux_86.tgz
 $ mv android-sdk-linux_86/ android-sdk
