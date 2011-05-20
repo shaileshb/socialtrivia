@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="center_horizontal">
+     
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" 
+	     android:layout_weight="1" 
+	     android:gravity="center_horizontal">
+	
+		<TextView
+			android:id="@+id/score"   
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="@string/score_txt"
+		    android:gravity="right"
+	    
+		    />
+		
+    <ImageButton 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+ 	android:textOn="" android:textOff="" 
+    android:id="@+id/button"
+    
+    android:layout_centerInParent="true" 
+    android:layout_centerVertical="true" 
+    android:layout_centerHorizontal="true" 
+    android:background="@drawable/android_button"
+	/>
+		
+		    
+		    
+		
+	</RelativeLayout>	
+
+      
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent" 
+                android:layout_height="fill_parent"
+     			 android:layout_weight="1"            
+                 >
+	
+	    <TextView android:id="@+id/question_label" 
+	              android:layout_width="fill_parent" 
+	              android:layout_height="wrap_content" 
+	              android:text="@string/question" />
+	
+	    <EditText android:id="@+id/answer" 
+	              android:layout_width="fill_parent" 
+	              android:layout_height="wrap_content" 
+	              
+	              android:layout_below="@id/question_label" />
+	  
+	    <Button android:id="@+id/skip" 
+	            android:layout_width="wrap_content" 
+	            android:layout_below="@id/answer"
+	            android:layout_height="wrap_content" 
+	            android:layout_alignParentLeft="true"
+	            android:layout_marginLeft="10px"
+	            android:text="@string/skip"/>
+	
+	    <Button android:id="@+id/next"
+	    		android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
+	            android:layout_toRightOf="@id/skip"
+	            android:layout_alignTop="@id/skip"
+	            android:text="@string/next"/>
+    </RelativeLayout>  
+        
+</LinearLayout>
