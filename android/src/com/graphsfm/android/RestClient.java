@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
  
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -13,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
  
@@ -21,7 +24,7 @@ import android.util.Log;
 
 public class RestClient {
  
-    private static String convertStreamToString(InputStream is) {
+    private static String convertStreamToString(InputStream is) throws Exception {
         /*
          * To convert the InputStream to String we use the BufferedReader.readLine()
          * method. We iterate until the BufferedReader return null which means
@@ -37,7 +40,7 @@ public class RestClient {
                 sb.append(line + "\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             try {
                 is.close();
@@ -48,7 +51,7 @@ public class RestClient {
         return sb.toString();
     }
  
-    public static JSONObject connect(String url) throws Exception
+    public static ArrayList<MediaClip> connect(String url) throws Exception
     {
  
         HttpClient httpclient = new DefaultHttpClient();
@@ -80,7 +83,18 @@ public class RestClient {
  
                 // Closing the input stream will trigger connection release
                 instream.close();
-                return json;
+                JSONArray jsonArray = json.getJSONArray("mediaclip");
+                ArrayList<MediaClip> mediaclips = new ArrayList<MediaClip>();
+                
+                for (int i=0; i<jsonArray.length(); i++) {
+                    MediaClip mediaClip = new MediaClip();
+                    mediaClip.setLocation(jsonArray.getJSONObject(i).getString("location"));
+                    mediaClip.setBandName(jsonArray.getJSONObject(i).getString("band"));
+                    mediaClip.setSongName(jsonArray.getJSONObject(i).getString("song"));
+                	mediaclips.add(mediaClip);
+                }
+                return mediaclips;
+    			
             }
  
  

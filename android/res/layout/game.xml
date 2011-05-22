@@ -7,20 +7,37 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" 
 	     android:layout_weight="1" 
-	     >
+	     android:gravity="center_horizontal">
 	
+		<TextView
+			android:id="@+id/score"   
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="@string/score_txt"
+		    android:gravity="right"
+	    
+		    />
+		<TextView
+			android:id="@+id/timer"   
+		    android:layout_width="fill_parent"
+		    android:textSize="30sp"
+		    android:layout_height="wrap_content" 
+			android:gravity="center"
+	    	android:layout_below="@id/score"
+	    	
+		    />
 		
     <ToggleButton 
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" 
  	android:textOn="" android:textOff="" 
     android:id="@+id/button"
-    android:layout_alignBottom="@+id/button"
-    android:layout_weight="1"
+    
     android:layout_centerInParent="true" 
     android:layout_centerVertical="true" 
     android:layout_centerHorizontal="true" 
     android:background="@drawable/android_button"
+    android:layout_below="@id/timer"
 	/>
 		
 		    
@@ -30,7 +47,7 @@
 		    android:src="@android:drawable/divider_horizontal_dark"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_centerInParent="true"
+		    
 		    android:layout_below="@+id/button" 
 	 />
 	</RelativeLayout>	
@@ -65,7 +82,7 @@
 	              android:layout_height="wrap_content" 
 	              android:text="@string/question" />
 	
-	    <EditText android:id="@+id/question" 
+	    <EditText android:id="@+id/answer" 
 	              android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content" 
 	              
@@ -73,7 +90,7 @@
 	  
 	    <Button android:id="@+id/skip" 
 	            android:layout_width="wrap_content" 
-	            android:layout_below="@id/question"
+	            android:layout_below="@id/answer"
 	            android:layout_height="wrap_content" 
 	            android:layout_alignParentLeft="true"
 	            android:layout_marginLeft="10px"

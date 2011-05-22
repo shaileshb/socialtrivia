@@ -1,16 +1,26 @@
 package com.graphsfm.android;
 
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
+
+
+
+import org.json.JSONArray;
+import 	org.json.JSONObject;
 
 public class AnswerActivity extends Activity {
     /** Called when the activity is first created. */
@@ -19,7 +29,6 @@ public class AnswerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_answer);
-        
         
 		final Button skipbutton = (Button) findViewById(R.id.skip);
 		skipbutton.setOnClickListener(new OnClickListener() {
@@ -42,13 +51,20 @@ public class AnswerActivity extends Activity {
              	Intent intent = new Intent();
             	if (b) 
             		{
+            		Context context = getApplicationContext();
+            		CharSequence text = "That is CORRECT!";
+            		int duration = Toast.LENGTH_SHORT;
+
+            		Toast toast = Toast.makeText(context, text, duration);
+            		toast.show();
+            		
             		intent.putExtra("score", 45);
             		}
                 setResult(RESULT_OK, intent);
                 finish();	            	
             	
             }    		  
-		});
+		}); 
     }
 	        
 			
