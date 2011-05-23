@@ -9,4 +9,5 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="score_txt">Score:</string>
+    <string name="offset">offset</string>
 </resources>

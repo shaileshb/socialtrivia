@@ -1,15 +1,11 @@
 package com.graphsfm.android;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -17,33 +13,28 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
-import org.json.JSONArray;
-import 	org.json.JSONObject;
-import 	android.os.CountDownTimer;
+import android.os.CountDownTimer;
+
 public class SocialTriviaActivity extends Activity {
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
 	private MediaPlayer m_mediaPlayer;
-	
+	private MediaClipIterator mediaclipiterator;
 	private Score score = new Score();
 	static final int ANSWER_QUESTION = 4;
-	ArrayList<MediaClip> mediaclips;
-	Iterator<MediaClip> iterator; 
-	private  Context mcontext;
-	
-    @Override
+	private Context mcontext;
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
-       
-        m_mediaPlayer = new MediaPlayer();
         mcontext = this;  
+        
+        m_mediaPlayer = new MediaPlayer();
+        
         try {
-        	mediaclips =  RestClient.connect("http://192.168.0.4/mediaclip.json");
-        	iterator = mediaclips.iterator();
 				
-				
+				mediaclipiterator = new MediaClipIterator(this);
 				// Convert the JSONArray to object array
  				updateView();
 				
@@ -92,48 +83,53 @@ public class SocialTriviaActivity extends Activity {
 		}
 		       
     }
-    protected Dialog onCreateDialog(int id) {
-	    Context mContext = this;
+	@Override
+    protected void onStop(){
+       super.onStop();
+       mediaclipiterator.savestate();
+	}
+	
+	protected Dialog onCreateDialog(int id) {
+		Context mContext = this;
 
-	    Dialog dialog = new Dialog(mContext);
+		Dialog dialog = new Dialog(mContext);
 
-	    dialog.setContentView(R.layout.game_answer);
-	    dialog.setTitle("Custom Dialog");
-	    dialog.setOwnerActivity(this);
-	    //TextView text = (TextView) dialog.findViewById(R.id.text);
-	    //text.setText("Hello, this is a custom dialog!");
-        return dialog;
-    }
-    protected void updateView() throws Exception {
-    	MediaClip current = iterator.next();
-    	m_mediaPlayer.reset();
+		dialog.setContentView(R.layout.game_answer);
+		dialog.setTitle("Custom Dialog");
+		dialog.setOwnerActivity(this);
+		// TextView text = (TextView) dialog.findViewById(R.id.text);
+		// text.setText("Hello, this is a custom dialog!");
+		return dialog;
+	}
+
+	protected void updateView() throws Exception {
+		MediaClip current = (MediaClip) mediaclipiterator.next();
+		m_mediaPlayer.reset();
 		m_mediaPlayer.setDataSource(current.getLocation());
 		m_mediaPlayer.prepare();
-		TextView t =(TextView)findViewById(R.id.score);
-		
-	    t.setText("Score :" + score.getScore());
-		
-    	
-    }
-    protected void onActivityResult(int requestCode, int resultCode,
-            Intent data) {
-    	
-        if (requestCode == ANSWER_QUESTION) {
-            if (resultCode == RESULT_OK) {
-                // A contact was picked.  Here we will just dis play it
-                // to the user.
-            	if (data.hasExtra("score")) {
-            			
-            			score.setScore(data.getExtras().getInt("score"));
-            	}
-            	try {
-                updateView();
-            	} catch (Exception e ) {
-            		e.printStackTrace();
-            	}
-            }
-        }
-    }
+		TextView t = (TextView) findViewById(R.id.score);
 
+		t.setText("Score :" + score.getScore());
+
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == ANSWER_QUESTION) {
+			if (resultCode == RESULT_OK) {
+				// A contact was picked. Here we will just dis play it
+				// to the user.
+				if (data.hasExtra("score")) {
+
+					score.setScore(data.getExtras().getInt("score"));
+				}
+				try {
+					updateView();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 }
