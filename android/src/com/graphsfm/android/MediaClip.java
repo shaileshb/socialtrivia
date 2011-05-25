@@ -1,6 +1,8 @@
 package com.graphsfm.android;
 
 public class MediaClip  {
+	
+	
 	private String location;
 	private String bandName;
 	private String songName;

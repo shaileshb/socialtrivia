@@ -23,7 +23,7 @@ public class SocialTriviaActivity extends Activity {
 	private Score score = new Score();
 	static final int ANSWER_QUESTION = 4;
 	private Context mcontext;
-
+	CountDownTimer mtimer;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +36,7 @@ public class SocialTriviaActivity extends Activity {
 				
 				mediaclipiterator = new MediaClipIterator(this);
 				// Convert the JSONArray to object array
- 				updateView();
+ 				showView();
 				
 	        
 				final Button button = (Button) findViewById(R.id.button);
@@ -52,7 +52,7 @@ public class SocialTriviaActivity extends Activity {
 		            	    t.setText(R.string.hint_txt1);
 		            	    final TextView mTextField = (TextView)findViewById(R.id.timer);
 		            	    
-		            	    new CountDownTimer(30000, 1000) {
+		            	    mtimer = new CountDownTimer(30000, 1000) {
 
 		            	        public void onTick(long millisUntilFinished) {
 		            	            mTextField.setText( Long.toString( millisUntilFinished / 1000));
@@ -65,7 +65,8 @@ public class SocialTriviaActivity extends Activity {
 
 		            	}else { 
 		            	    m_mediaPlayer.pause();
-
+		            	    mtimer.cancel();
+		            	    
 		            	    Intent myIntent = new Intent(v.getContext(), AnswerActivity.class);
 		            	    myIntent.putExtra("score", score.getScore());
 		                    startActivityForResult(myIntent, ANSWER_QUESTION);
@@ -89,24 +90,14 @@ public class SocialTriviaActivity extends Activity {
        mediaclipiterator.savestate();
 	}
 	
-	protected Dialog onCreateDialog(int id) {
-		Context mContext = this;
-
-		Dialog dialog = new Dialog(mContext);
-
-		dialog.setContentView(R.layout.game_answer);
-		dialog.setTitle("Custom Dialog");
-		dialog.setOwnerActivity(this);
-		// TextView text = (TextView) dialog.findViewById(R.id.text);
-		// text.setText("Hello, this is a custom dialog!");
-		return dialog;
-	}
-
-	protected void updateView() throws Exception {
-		MediaClip current = (MediaClip) mediaclipiterator.next();
+	protected void showView() throws Exception {
+		
 		m_mediaPlayer.reset();
-		m_mediaPlayer.setDataSource(current.getLocation());
+		m_mediaPlayer.setDataSource(MediaClipIterator.currentMediaClip.getLocation());
 		m_mediaPlayer.prepare();
+		
+		TextView timer = (TextView)findViewById(R.id.timer);
+		timer.setText("");
 		TextView t = (TextView) findViewById(R.id.score);
 
 		t.setText("Score :" + score.getScore());
@@ -123,13 +114,15 @@ public class SocialTriviaActivity extends Activity {
 
 					score.setScore(data.getExtras().getInt("score"));
 				}
+			}
 				try {
-					updateView();
+					mediaclipiterator.next();	
+					showView();
 				} catch (Exception e) {
 					e.printStackTrace();
+				
 				}
 			}
-		}
 	}
 
 }

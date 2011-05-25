@@ -13,14 +13,17 @@ public class MediaClipIterator  implements Iterator {
 	int offset;
 	public static final String PREFS_NAME = "earbuzilla";
 
+	public static MediaClip currentMediaClip;
+	
 	MediaClipIterator(Activity activity) throws Exception {
-		mediaclips =  RestClient.connect("http://192.168.0.4/mediaclip.json");
+		mediaclips =  RestClient.connect("http://www.earbuzilla.com/mediaclip.json");
 		
 		mactivity = activity;
 		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
 
 		//SharedPreferences settings = activity.getPreferences(Context.MODE_PRIVATE);
 	    offset = settings.getInt( "offset", 0);
+	    currentMediaClip = (MediaClip) next();
 	}
 	@Override
 	public boolean hasNext() {
@@ -30,11 +33,14 @@ public class MediaClipIterator  implements Iterator {
 	@Override
 	public Object next() {
 		// TODO Auto-generated method stub
-		if( mediaclips.size() <= offset)
+		offset = offset + 1;
+		
+		if( mediaclips.size() >= offset)
 				offset = 0;
-		else
-				offset = offset + 1;
-		return mediaclips.get(offset);
+		
+				
+		currentMediaClip = mediaclips.get(offset);
+		return currentMediaClip;
 	}
 	@Override
 	public void remove() {
