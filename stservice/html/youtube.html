@@ -1,0 +1,65 @@
+<HTML>
+<HEADER>
+</HEADER>
+    <script>
+    
+	
+
+javascript:(function(){    
+ w = window.open("", "mywindow1", "status=1,width=350,height=150");
+ w.document.write('<form action="http://localhost/populate_stagging.php" method="post"> <input type="hidden" name="youtube_url" value=' + document.location +'> start position : <input type="text" name="startposition"/></br> Artist name: <input type="text" name="artistname"/> </br> Song name: <input type="text" name="songname"/> <input type="submit" name="submit" value="Submit" /></form>');
+	
+})();
+
+	function getflvURL() {
+	  	var query =     document.getElementById("movie_player").getAttribute("flashvars");
+	
+	    var vars = query.split("&");
+	    for (var i=0;i<vars.length;i++) {
+	      var pair = vars[i].split("=");
+	      if (pair[0] == 'fmt_url_map') {
+	        urlall = unescape(pair[1]);
+	        var furl = urlall.split(",")[0];
+	        var furl2 = furl.split("|")[1];
+	        return furl2;
+	        
+	      }
+	  }
+	} 
+	var flvurl = getflvURL();
+	
+	var http = new XMLHttpRequest(); 
+ 	
+ 	
+ 	var url = "http://localhost/p.php";
+	var params = "flvurl=" + flvurl;
+	http.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.setRequestHeader("Content-length", params.length);
+	http.setRequestHeader("Connection", "close");
+
+	http.onreadystatechange = function() {//Call a function when the state changes.
+	if(http.readyState == 4 && http.status == 200) {
+			alert(http.responseText);
+	}
+	}
+	http.send(params);
+ 	    </script>
+
+    
+
+
+<BODY>
+              <embed type="application/x-shockwave-flash"     
+              src="http://s.ytimg.com/yt/swfbin/watch_as3-vfl9DouAr.swf"  
+                 width="640" id="movie_player" height="390"  
+                   flashvars="rv.2.thumbnailUrl=http%3A%2F%2Fi2.ytimg.com%2Fvi%2FqeebB2Hd894%2Fdefault.jpg&amp;rv.7.length_seconds=217&amp;rv.0.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DXLJCtZK0x5M&amp;rv.0.view_count=914647&amp;enablecsi=1&amp;rv.2.title=Mayya+Mayya-Guru&amp;rv.4.rating=&amp;rv.3.view_count=91062&amp;rv.0.length_seconds=370&amp;rv.4.thumbnailUrl=http%3A%2F%2Fi3.ytimg.com%2Fvi%2F2dpbmve1G2E%2Fdefault.jpg&amp;fmt_url_map=34%7Chttp%3A%2F%2Fv11.lscache4.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D34%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3D0F5C4F38AFD9F5CB3647FE19C4B24B14CDDDDC1E.2659CD64BE4245815C4E029D8BF84B2BC0A80C36%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62%2C18%7Chttp%3A%2F%2Fv21.lscache6.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D18%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3DB84EC18C82FE18689C09A8349D4DE952C9F7E0A8.7168AB497902F9ED007AC34E0A27FE308CF8B454%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62%2C5%7Chttp%3A%2F%2Fv8.lscache3.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D5%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3DA6370BB50E6C963DA6660420445F5A2E0481F29E.658323003B8B5F890F1D1FCB6A635B731D0FC74C%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62&amp;csi_page_type=watch&amp;keywords=Maiya%2CMaiya%2CGuru&amp;cr=US&amp;rv.1.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dt4DFBcVyYgo&amp;rv.6.thumbnailUrl=http%3A%2F%2Fi3.ytimg.com%2Fvi%2Fvk8lg4ONQ-8%2Fdefault.jpg&amp;rv.3.rating=&amp;fmt_list=34%2F320x240%2F9%2F0%2F115%2C18%2F320x240%2F9%2F0%2F115%2C5%2F320x240%2F7%2F0%2F0&amp;rv.7.id=hVhFUwmT9MQ&amp;rv.0.rating=&amp;rv.6.author=HereT4U&amp;rv.3.title=Maya+Maya&amp;rv.5.id=cok2krnGCoU&amp;tk=OulunCetGiZ9UewVBuZqFrgQodStHv9-tfX_ps3uRo4nbUzIRAzpxA%3D%3D&amp;rv.0.featured=1&amp;rv.0.id=XLJCtZK0x5M&amp;rv.7.view_count=30186&amp;rv.5.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dcok2krnGCoU&amp;rv.6.length_seconds=230&amp;sourceid=ys&amp;timestamp=1304297593&amp;rv.0.author=erosentertainment&amp;rv.3.thumbnailUrl=http%3A%2F%2Fi3.ytimg.com%2Fvi%2Fbv4tm7J7M9k%2Fdefault.jpg&amp;rv.2.author=tanenen&amp;rv.6.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dvk8lg4ONQ-8&amp;fmt_map=34%2F320x240%2F9%2F0%2F115%2C18%2F320x240%2F9%2F0%2F115%2C5%2F320x240%2F7%2F0%2F0&amp;showpopout=1&amp;hl=en_US&amp;endscreen_module=http%3A%2F%2Fs.ytimg.com%2Fyt%2Fswfbin%2Fendscreen-vflgqTF8z.swf&amp;rv.5.length_seconds=360&amp;rv.0.thumbnailUrl=http%3A%2F%2Fi1.ytimg.com%2Fvi%2FXLJCtZK0x5M%2Fdefault.jpg&amp;rv.7.author=BKBproduktionz&amp;referrer=http%3A%2F%2Fwww.youtube.com%2Fresults%3Fsearch_query%3Dmaiya%2Bmaiya%26aq%3Df&amp;leanback_module=http%3A%2F%2Fs.ytimg.com%2Fyt%2Fswfbin%2Fleanback_module-vflkBy5D2.swf&amp;rv.1.length_seconds=343&amp;rv.3.id=bv4tm7J7M9k&amp;rv.2.id=qeebB2Hd894&amp;rv.2.length_seconds=220&amp;t=vjVQa1PpcFPfFOKzEMmNIFmnna2-TcS9GvuTkGplALo%3D&amp;rv.6.id=vk8lg4ONQ-8&amp;rv.6.view_count=139188&amp;rv.3.author=jOvaNa333&amp;rv.4.id=2dpbmve1G2E&amp;fexp=904410%2C907608&amp;rv.4.author=nishcooldude&amp;rv.7.thumbnailUrl=http%3A%2F%2Fi1.ytimg.com%2Fvi%2FhVhFUwmT9MQ%2Fdefault.jpg&amp;allow_embed=1&amp;vq=auto&amp;rv.2.rating=&amp;rv.7.title=Valainthu+Aadu+%E2%99%AA+-+JDawg+and+Jeevs+%5BBKB%5D&amp;rv.1.id=t4DFBcVyYgo&amp;sk=7OaRRn2-RSsBSATo8Sc34AkGWhRJnTGpC&amp;rv.6.title=Sunita+Gogoi+Auditions+Performance+Mayya+Mayya%C2%A0-%C2%A0Dance+India+Dance&amp;rv.4.length_seconds=272&amp;rv.1.thumbnailUrl=http%3A%2F%2Fi1.ytimg.com%2Fvi%2Ft4DFBcVyYgo%2Fdefault.jpg&amp;rv.5.view_count=27354&amp;length_seconds=309&amp;enablejsapi=1&amp;plid=AASiQHK-8PL6jC78&amp;fmt_stream_map=34%7Chttp%3A%2F%2Fv11.lscache4.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D34%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3D0F5C4F38AFD9F5CB3647FE19C4B24B14CDDDDC1E.2659CD64BE4245815C4E029D8BF84B2BC0A80C36%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62%7C%7Ctc.v11.cache4.c.youtube.com%2C18%7Chttp%3A%2F%2Fv21.lscache6.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D18%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3DB84EC18C82FE18689C09A8349D4DE952C9F7E0A8.7168AB497902F9ED007AC34E0A27FE308CF8B454%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62%7C%7Ctc.v21.cache6.c.youtube.com%2C5%7Chttp%3A%2F%2Fv8.lscache3.c.youtube.com%2Fvideoplayback%3Fsparams%3Did%252Cexpire%252Cip%252Cipbits%252Citag%252Calgorithm%252Cburst%252Cfactor%252Coc%253AU0hPSVNMV19FSkNOOV9LRkFH%26fexp%3D904410%252C907608%26algorithm%3Dthrottle-factor%26itag%3D5%26ipbits%3D0%26burst%3D40%26sver%3D3%26signature%3DA6370BB50E6C963DA6660420445F5A2E0481F29E.658323003B8B5F890F1D1FCB6A635B731D0FC74C%26expire%3D1304319600%26key%3Dyt1%26ip%3D0.0.0.0%26factor%3D1.25%26id%3Dcdf1e9cf88104c62%7C%7Ctc.v8.cache3.c.youtube.com&amp;tmi=1&amp;rv.5.rating=&amp;rv.4.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D2dpbmve1G2E&amp;rv.1.author=Alok416&amp;rv.1.rating=&amp;rv.4.title=TASHAN-Chhaliya+full+song+%28HD%29&amp;rv.5.thumbnailUrl=http%3A%2F%2Fi4.ytimg.com%2Fvi%2Fcok2krnGCoU%2Fdefault.jpg&amp;watermark=http%3A%2F%2Fs.ytimg.com%2Fyt%2Fswf%2Flogo-vfl_bP6ud.swf%2Chttp%3A%2F%2Fs.ytimg.com%2Fyt%2Fswf%2Fhdlogo-vfloR6wva.swf&amp;rv.0.title=Beedi+song+-+Omkara&amp;rv.7.rating=&amp;rv.3.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dbv4tm7J7M9k&amp;rv.2.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DqeebB2Hd894&amp;rv.7.url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DhVhFUwmT9MQ&amp;rv.2.view_count=200973&amp;rv.4.view_count=651356&amp;rv.1.view_count=45696&amp;rv.5.title=Me+singing+Mayya+Mayya+from+Guru+in+tamil+-+Yamuna&amp;rv.6.rating=&amp;q=maiya+maiya&amp;rv.1.title=MAIYA+MAIYA+--ALOK&amp;video_id=zfHpz4gQTGI&amp;rv.3.length_seconds=369&amp;rv.5.author=ICYcube123"	     
+                   allowscriptaccess="always" allowfullscreen="true" bgcolor="#000000">
+    <script>
+      alert( findFLVmap("fmt_url_map") );
+    </script>
+
+</BODY>                   
+</HTML>
