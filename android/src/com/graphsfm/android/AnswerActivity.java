@@ -1,18 +1,16 @@
 package com.graphsfm.android;
 
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +18,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
-
-
-
-import org.json.JSONArray;
-import 	org.json.JSONObject;
 
 public class AnswerActivity extends Activity {
     /** Called when the activity is first created. */
@@ -53,7 +44,8 @@ public class AnswerActivity extends Activity {
             public void onClick(View v) {
             	TextView t = (TextView) findViewById( R.id.answer);
             	String answer = t.getText().toString();
-            	 Pattern p = Pattern.compile("beatles");
+            	String band = MediaClipIterator.currentMediaClip.getBandName();
+            	 Pattern p = Pattern.compile(band);
             	 Matcher m = p.matcher(answer);
             	 boolean b = m.matches();
              	
@@ -74,7 +66,7 @@ public class AnswerActivity extends Activity {
         				finish();
         			}
 
-        		}, 0, 1000);
+        		}, 0, 1500);
             	
                 
                 
@@ -91,17 +83,19 @@ public class AnswerActivity extends Activity {
     
     protected Dialog onCreateDialog(int b) {
     	
-    	Context mContext = getApplicationContext();
-    	mdialog = new Dialog(this);
+    	
+    	AlertDialog.Builder builder;
+    	Context mContext = this;
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.answer_feedback,
+		                              (ViewGroup) findViewById(R.id.answer_feedback_layout));
 
-    			
-		mdialog.setContentView(R.layout.answer_feedback);
-		//LayoutInflater inflater = getLayoutInflater();
-		//View layout = inflater.inflate(R.layout.answer_feedback,
-		 //                              (ViewGroup) findViewById(R.id.answer_feedback_layout));
 
-		ImageView image = (ImageView) mdialog.findViewById(R.id.feedback_id);
- 		TextView text = (TextView) mdialog.findViewById(R.id.feedback_txt_id);
+    	builder = new AlertDialog.Builder(mContext);
+    	builder.setView(layout);
+    	    	 			
+		ImageView image = (ImageView) layout.findViewById(R.id.feedback_id);
+ 		TextView text = (TextView) layout.findViewById(R.id.feedback_txt_id);
  	    if( b == 1) {
 			image.setImageResource(R.drawable.correct);
     		text.setText("That is correct ! The band is " + MediaClipIterator.currentMediaClip.getBandName());
@@ -113,6 +107,8 @@ public class AnswerActivity extends Activity {
 
 		//toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 		//toast.setDuration(Toast.LENGTH_LONG);
+    	mdialog = builder.create();
+
  	    return mdialog;
     }
 }

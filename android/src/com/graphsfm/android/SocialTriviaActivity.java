@@ -2,10 +2,8 @@ package com.graphsfm.android;
 
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import android.os.CountDownTimer;
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class SocialTriviaActivity extends Activity {
 	/** Called when the activity is first created. */
@@ -24,9 +23,14 @@ public class SocialTriviaActivity extends Activity {
 	static final int ANSWER_QUESTION = 4;
 	private Context mcontext;
 	CountDownTimer mtimer;
+	GoogleAnalyticsTracker tracker;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tracker = GoogleAnalyticsTracker.getInstance();
+        tracker.start("UA-5092970-7", 20, this);
+
         setContentView(R.layout.game);
         mcontext = this;  
         
@@ -43,9 +47,15 @@ public class SocialTriviaActivity extends Activity {
 	        
 				button.setOnClickListener(new OnClickListener() {
 		        	Boolean mediastatus = false;
-		        	
-		            public void onClick(View v) {
-		                // Perform action on clicks
+		        	 @Override
+		             public void onClick(View v) {
+		               tracker.trackEvent(
+		                   "Clicks",  // Category
+		                   "Button",  // Action
+		                   "clicked", // Label
+		                   77);       // Value
+		        	 	
+
 		            	if( ! mediastatus) {
 		            		m_mediaPlayer.start();
 		            		TextView t =(TextView)findViewById(R.id.hint_id); 
@@ -90,7 +100,15 @@ public class SocialTriviaActivity extends Activity {
        mediaclipiterator.savestate();
 	}
 	
+	@Override
+	  protected void onDestroy() {
+	    super.onDestroy();
+	    // Stop the tracker when it is no longer needed.
+	    tracker.stop();
+	  }
+
 	protected void showView() throws Exception {
+		tracker.trackPageView("/play1");
 		
 		m_mediaPlayer.reset();
 		m_mediaPlayer.setDataSource(MediaClipIterator.currentMediaClip.getLocation());

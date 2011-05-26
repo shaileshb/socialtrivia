@@ -10,4 +10,6 @@
     <string name="next">Next</string>
     <string name="score_txt">Score:</string>
     <string name="offset">offset</string>
+    <string name="timer_txt">Timer:</string>
+    
 </resources>

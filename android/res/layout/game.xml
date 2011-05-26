@@ -1,108 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="center_horizontal">
-     
-	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" 
-	     android:layout_weight="1" 
-	     android:gravity="center_horizontal">
-	
-		<TextView
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="1">
+
+	<TableRow>
+        <TextView
 			android:id="@+id/score"   
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
 		    android:text="@string/score_txt"
-		    android:gravity="right"
-	    
+		    android:gravity="left"
 		    />
-		<TextView
+	<TextView
 			android:id="@+id/timer"   
-		    android:layout_width="fill_parent"
-		    android:textSize="30sp"
-		    android:layout_height="wrap_content" 
-			android:gravity="center"
-	    	android:layout_below="@id/score"
-	    	
+		    
+		    android:text="@string/timer_txt"
+			android:gravity="right"
 		    />
-		
-    <ToggleButton 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" 
- 	android:textOn="" android:textOff="" 
-    android:id="@+id/button"
-    
-    android:layout_centerInParent="true" 
-    android:layout_centerVertical="true" 
-    android:layout_centerHorizontal="true" 
-    android:background="@drawable/android_button"
-    android:layout_below="@id/timer"
-	/>
-		
-		    
-		    
+	</TableRow>
+	<View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+	
+	<TableRow>
+		<ToggleButton 
+		    android:textOn="" android:textOff="" 
+	    	android:id="@+id/button"
+	    	android:background="@drawable/android_button"
+	    	android:layout_span="2"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+	
+	</TableRow>
+	
+	<TableRow>
 		<ImageView
 		    xmlns:android="http://schemas.android.com/apk/res/android"
 		    android:src="@android:drawable/divider_horizontal_dark"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
+		    android:layout_column="2"
+		 />
+	
+	</TableRow>
+     
+		
+    	
 		    
-		    android:layout_below="@+id/button" 
-	 />
-	</RelativeLayout>	
-
- <ViewFlipper android:id="@+id/details" 
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-          
-        >     
-  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent" 
-                android:layout_height="fill_parent"
-     			 android:layout_weight="1"            
-                 >
+		    
+	
+      
 		<TextView
 			android:id="@+id/hint_id"   
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="@string/hint_txt"
+			android:gravity="bottom"
 		    />
+		<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
 	    
-</RelativeLayout>    
-  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent" 
-                android:layout_height="fill_parent"
-     			 android:layout_weight="1"            
-                 >
-	
-	    <TextView android:id="@+id/question_label" 
-	              android:layout_width="fill_parent" 
-	              android:layout_height="wrap_content" 
-	              android:text="@string/question" />
-	
-	    <EditText android:id="@+id/answer" 
-	              android:layout_width="fill_parent" 
-	              android:layout_height="wrap_content" 
-	              
-	              android:layout_below="@id/question_label" />
-	  
-	    <Button android:id="@+id/skip" 
-	            android:layout_width="wrap_content" 
-	            android:layout_below="@id/answer"
-	            android:layout_height="wrap_content" 
-	            android:layout_alignParentLeft="true"
-	            android:layout_marginLeft="10px"
-	            android:text="@string/skip"/>
-	
-	    <Button android:id="@+id/next"
-	    		android:layout_width="wrap_content" 
-	            android:layout_height="wrap_content"
-	            android:layout_toRightOf="@id/skip"
-	            android:layout_alignTop="@id/skip"
-	            android:text="@string/next"/>
-    </RelativeLayout>  
-        
-    </ViewFlipper>  
-</LinearLayout>
+    
+      
+</TableLayout>
+      
