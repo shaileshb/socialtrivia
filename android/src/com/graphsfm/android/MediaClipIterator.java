@@ -10,13 +10,13 @@ public class MediaClipIterator  implements Iterator {
 
 	ArrayList<MediaClip> mediaclips;
 	Activity mactivity;
-	int offset;
+	int offset =0;
 	public static final String PREFS_NAME = "earbuzilla";
 
 	public static MediaClip currentMediaClip;
 	
 	MediaClipIterator(Activity activity) throws Exception {
-		mediaclips =  RestClient.connect("http://www.earbuzilla.com/mediaclip.json");
+		mediaclips =  RestClient.connect("http://192.168.0.4/yearlyhit.json");
 		
 		mactivity = activity;
 		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
@@ -33,13 +33,13 @@ public class MediaClipIterator  implements Iterator {
 	@Override
 	public Object next() {
 		// TODO Auto-generated method stub
+		int size = mediaclips.size();
+		if( offset >= mediaclips.size())
+				offset = 0;
+						
+		currentMediaClip = mediaclips.get(offset);
 		offset = offset + 1;
 		
-		if( mediaclips.size() >= offset)
-				offset = 0;
-		
-				
-		currentMediaClip = mediaclips.get(offset);
 		return currentMediaClip;
 	}
 	@Override

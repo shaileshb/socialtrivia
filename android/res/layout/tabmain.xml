@@ -9,11 +9,11 @@
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
 			android:layout_alignParentTop="true" android:layout_above="@android:id/tabs">
 			<TextView android:id="@+id/textview1" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="Tab 1" />
+				android:layout_height="fill_parent" android:text="" />
 			<TextView android:id="@+id/textview2" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="Tab 2" />
+				android:layout_height="fill_parent" android:text="" />
 			<TextView android:id="@+id/textview3" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="Tab 3" />
+				android:layout_height="fill_parent" android:text="" />
 		</FrameLayout>
 		<TabWidget android:id="@android:id/tabs"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"

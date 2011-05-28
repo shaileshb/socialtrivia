@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:padding="10px" >
 
-
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:stretchColumns="1">
-
-	<TableRow>
-        <TextView
+	    <TextView
 			android:id="@+id/score"   
 		    android:text="@string/score_txt"
-		    android:gravity="left"
+		    
+		    android:layout_width="wrap_content" 
+              android:layout_height="wrap_content"
 		    />
-	<TextView
-			android:id="@+id/timer"   
-		    
-		    android:text="@string/timer_txt"
-			android:gravity="right"
-		    />
-	</TableRow>
-	<View
-        android:layout_height="2dip"
-        android:background="#FF909090" />
-	
-	<TableRow>
-		<ToggleButton 
-		    android:textOn="" android:textOff="" 
-	    	android:id="@+id/button"
-	    	android:background="@drawable/android_button"
-	    	android:layout_span="2"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-	
-	</TableRow>
-	
-	<TableRow>
-		<ImageView
-		    xmlns:android="http://schemas.android.com/apk/res/android"
-		    android:src="@android:drawable/divider_horizontal_dark"
-		    android:layout_column="2"
-		 />
-	
-	</TableRow>
-     
-		
-    	
-		    
-		    
-	
-      
-		<TextView
+	    <TextView android:id="@+id/timer" 
+	    	android:layout_alignParentRight="true" 
+	    	android:layout_width="wrap_content" 
+	    	android:text="@string/timer_txt"
+	    	android:layout_height="wrap_content">
+	    </TextView>
+	    <View android:layout_width="wrap_content" 
+	    	android:id="@+id/view1" 
+	    	android:layout_below="@id/timer"
+ 			android:background="#FF909090"
+	    	android:layout_height="2dp"></View>
+			    	
+	    <ToggleButton android:layout_below="@+id/view1"
+	    	 android:layout_width="wrap_content" 
+	    	 android:layout_height="wrap_content" 
+	    	 android:id="@+id/button" 
+	    	 android:text=""
+	    	 android:background="@drawable/android_button" 
+	    	 android:layout_centerInParent="true"
+	    	 ></ToggleButton>
+	  	<View android:layout_width="wrap_content" 
+	    	android:id="@+id/view2" 
+	    	android:layout_below="@id/button"
+ 			android:background="#FF909090"
+	    	android:layout_height="2dp"></View>
+	    
+	  		<TextView
 			android:id="@+id/hint_id"   
+			
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="@string/hint_txt"
-			android:gravity="bottom"
+			android:layout_alignParentBottom='true'
 		    />
-		<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
-	    
-    
-      
-</TableLayout>
-      
+		
+	  
+</RelativeLayout>	

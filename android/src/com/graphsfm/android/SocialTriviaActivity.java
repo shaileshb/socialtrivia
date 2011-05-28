@@ -52,7 +52,7 @@ public class SocialTriviaActivity extends Activity {
 		               tracker.trackEvent(
 		                   "Clicks",  // Category
 		                   "Button",  // Action
-		                   "clicked", // Label
+		                   "stopmusic", // Label
 		                   77);       // Value
 		        	 	
 
@@ -61,7 +61,7 @@ public class SocialTriviaActivity extends Activity {
 		            		TextView t =(TextView)findViewById(R.id.hint_id); 
 		            	    t.setText(R.string.hint_txt1);
 		            	    final TextView mTextField = (TextView)findViewById(R.id.timer);
-		            	    
+		            	    final View mview = v;
 		            	    mtimer = new CountDownTimer(30000, 1000) {
 
 		            	        public void onTick(long millisUntilFinished) {
@@ -69,6 +69,12 @@ public class SocialTriviaActivity extends Activity {
 		            	        }
 
 		            	        public void onFinish() {
+		            	        	
+		            	        	// When count down is done turn off the music
+		            	        	m_mediaPlayer.pause();
+				            	    Intent myIntent = new Intent(mview.getContext(), AnswerActivity.class);
+				            	    myIntent.putExtra("score", score.getScore());
+				                    startActivityForResult(myIntent, ANSWER_QUESTION);
 		            	           // mTextField.setText("done!");
 		            	        }
 		            	     }.start();
