@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import android.os.CountDownTimer;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -43,10 +44,10 @@ public class SocialTriviaActivity extends Activity {
  				showView();
 				
 	        
-				final Button button = (Button) findViewById(R.id.button);
-	        
+ 				final Button button = (Button) findViewById(R.id.button);
+
 				button.setOnClickListener(new OnClickListener() {
-		        	Boolean mediastatus = false;
+		        	
 		        	 @Override
 		             public void onClick(View v) {
 		               tracker.trackEvent(
@@ -55,42 +56,21 @@ public class SocialTriviaActivity extends Activity {
 		                   "stopmusic", // Label
 		                   77);       // Value
 		        	 	
-
-		            	if( ! mediastatus) {
-		            		m_mediaPlayer.start();
-		            		TextView t =(TextView)findViewById(R.id.hint_id); 
-		            	    t.setText(R.string.hint_txt1);
-		            	    final TextView mTextField = (TextView)findViewById(R.id.timer);
-		            	    final View mview = v;
-		            	    mtimer = new CountDownTimer(30000, 1000) {
-
-		            	        public void onTick(long millisUntilFinished) {
-		            	            mTextField.setText( Long.toString( millisUntilFinished / 1000));
-		            	        }
-
-		            	        public void onFinish() {
-		            	        	
-		            	        	// When count down is done turn off the music
-		            	        	m_mediaPlayer.pause();
-				            	    Intent myIntent = new Intent(mview.getContext(), AnswerActivity.class);
-				            	    myIntent.putExtra("score", score.getScore());
-				                    startActivityForResult(myIntent, ANSWER_QUESTION);
-		            	           // mTextField.setText("done!");
-		            	        }
-		            	     }.start();
-
-		            	}else { 
-		            	    m_mediaPlayer.pause();
+		               		musicStarted = false;
+		    		        m_mediaPlayer.pause();
 		            	    mtimer.cancel();
-		            	    
+		            	    ToggleButton b = (ToggleButton) findViewById(R.id.button);
+		            	    b.setChecked(false);
+    
 		            	    Intent myIntent = new Intent(v.getContext(), AnswerActivity.class);
 		            	    myIntent.putExtra("score", score.getScore());
 		                    startActivityForResult(myIntent, ANSWER_QUESTION);
 		            	    
 		            	    		            	
 		            }
-		            mediastatus = !mediastatus; // toggle the value
-	        }});
+		            
+	        
+        });
         }
 			 catch (Exception e1) {
 				Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
@@ -113,6 +93,7 @@ public class SocialTriviaActivity extends Activity {
 	    tracker.stop();
 	  }
 
+	boolean musicStarted = false;
 	protected void showView() throws Exception {
 		tracker.trackPageView("/play1");
 		
@@ -125,6 +106,43 @@ public class SocialTriviaActivity extends Activity {
 		TextView t = (TextView) findViewById(R.id.score);
 
 		t.setText("Score :" + score.getScore());
+        
+		Context context = getApplicationContext();
+		CharSequence text = "Get Ready!";
+		int duration = Toast.LENGTH_LONG;
+
+		final Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+		
+	    final TextView mTextField = (TextView)findViewById(R.id.timer);
+	    mtimer = new CountDownTimer(34000, 1000) {
+
+	        public void onTick(long millisUntilFinished) {
+	        	if ((millisUntilFinished/1000 <= 30) && ! musicStarted ) {
+	        		toast.cancel();
+            		m_mediaPlayer.start();
+            		TextView t =(TextView)findViewById(R.id.hint_id); 
+            	    t.setText(R.string.hint_txt1);
+            	    ToggleButton b = (ToggleButton) findViewById(R.id.button);
+            	    b.setChecked(true);
+            	    musicStarted = true;
+	        	}
+	            mTextField.setText( Long.toString( millisUntilFinished / 1000));
+	        }
+
+	        public void onFinish() {
+	        	
+	        	// When count down is done turn off the music
+	        	m_mediaPlayer.pause();
+	        	musicStarted = false;
+        	    ToggleButton b = (ToggleButton) findViewById(R.id.button);
+        	    b.setChecked(false);
+        	    Intent myIntent = new Intent(mcontext, AnswerActivity.class);
+        	    myIntent.putExtra("score", score.getScore());
+                startActivityForResult(myIntent, ANSWER_QUESTION);
+	           // mTextField.setText("done!");
+	        }
+	     }.start();
 
 	}
 

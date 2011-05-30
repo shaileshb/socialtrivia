@@ -33,7 +33,7 @@ public class SplashActivity extends Activity {
             	    Intent myIntent = new Intent(getApplicationContext(), TabLayoutActivity.class);
                     startActivity( myIntent);
 
-	                stop();
+	                
 	            }
 	        }
 	    };

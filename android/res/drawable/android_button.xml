@@ -1,6 +1,6 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true"
-        android:drawable="@drawable/mediacontrol_stop" /> <!-- pressed -->
-    <item android:drawable="@drawable/mediacontrol_play" /> <!-- default/unchecked -->
+        android:drawable="@drawable/stopred" /> <!-- pressed -->
+    <item android:drawable="@drawable/grey_play" /> <!-- default/unchecked -->
 </selector>

@@ -69,7 +69,7 @@ public class AnswerActivity extends Activity {
         				finish();
         			}
 
-        		}, 0, 1500);
+        		}, 2000);
             	
                 
                 

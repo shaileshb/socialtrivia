@@ -11,5 +11,6 @@
     <string name="score_txt">Score:</string>
     <string name="offset">offset</string>
     <string name="timer_txt">Timer:</string>
+    <string name="getready_txt">Get Ready!</string>
     
 </resources>
