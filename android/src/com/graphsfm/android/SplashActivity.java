@@ -3,47 +3,53 @@ package com.graphsfm.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class SplashActivity extends Activity {
-	protected boolean _active = true;
-	protected int _splashTime = 5000;
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	    setContentView(R.layout.splash);
-	 
-	    // thread for displaying the SplashScreen
-	    Thread splashTread = new Thread() {
-	        @Override
-	        public void run() {
-	            try {
-	                int waited = 0;
-	                while(_active && (waited < _splashTime)) {
-	                    sleep(100);
-	                    if(_active) {
-	                        waited += 100;
-	                    }
-	                }
-	            } catch(InterruptedException e) {
-	                // do nothing
-	            } finally {
-	                finish();
-	                //startActivity(new Intent("com.graphsfm.android.TabLayoutActivity"));
-            	    Intent myIntent = new Intent(getApplicationContext(), TabLayoutActivity.class);
-                    startActivity( myIntent);
+  private static final int SPLASH_TIME = 3000;
+  private boolean isActive = true;
 
-	                
-	            }
-	        }
-	    };
-	    splashTread.start();
-	}
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-	    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-	        _active = false;
-	    }
-	    return true;
-	}
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.splash);
+
+    // TODO: This is a good place to kick off initialization
+    // and wait for it to complete. For now - using a 3 second
+    // idle loop to simulate initialization.
+
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        finishSplashActivity();
+      }
+    }, SPLASH_TIME);
+  }
+
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    if (getResources().getBoolean(R.bool.testsplash)) {
+      finishSplashActivity();
+    }
+    return true;
+  }
+
+  public void onPause() {
+    super.onPause();
+    isActive = false;
+  }
+
+  private void finishSplashActivity() {
+    if (isActive) {
+      finish();
+      Intent myIntent = new Intent(getApplicationContext(),
+          TabLayoutActivity.class);
+      startActivity(myIntent);
+    } else {
+      Log.i(getClass().getSimpleName(),
+          "ignoring finishSplashActivity(). isActive = false");
+    }
+  }
 }

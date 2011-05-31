@@ -1,61 +1,42 @@
 package com.graphsfm.android;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.Context;
-public class MediaClipIterator  implements Iterator {
+import android.util.Log;
 
-	ArrayList<MediaClip> mediaclips;
-	Activity mactivity;
-	int offset =0;
-	public static final String PREFS_NAME = "earbuzilla";
+public class MediaClipIterator {
+  private static MediaClipIterator INSTANCE = new MediaClipIterator();
+  private ArrayList<MediaClip> mediaclips = null;
+  private int offset = 0;
 
-	public static MediaClip currentMediaClip;
-	
-	MediaClipIterator(Activity activity) throws Exception {
-		mediaclips =  RestClient.connect("http://192.168.0.4/yearlyhit.json");
-		
-		mactivity = activity;
-		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+  private MediaClipIterator() {
+    try {
+      mediaclips = RestClient.connect("http://192.168.0.4/yearlyhit.json");
+    } catch (Exception e) {
+      Log.w(this.getClass().getSimpleName(), "Could not fetch media clips", e);
+    }
+    offset = EarbugDB.getInstance().getOffset();
+  }
 
-		//SharedPreferences settings = activity.getPreferences(Context.MODE_PRIVATE);
-	    offset = settings.getInt( "offset", 0);
-	    currentMediaClip = (MediaClip) next();
-	}
-	@Override
-	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public Object next() {
-		// TODO Auto-generated method stub
-		int size = mediaclips.size();
-		if( offset >= mediaclips.size())
-				offset = 0;
-						
-		currentMediaClip = mediaclips.get(offset);
-		offset = offset + 1;
-		
-		return currentMediaClip;
-	}
-	@Override
-	public void remove() {
-		// TODO Auto-generated method stub
-		
-	}
-	public void savestate() {
-		// TODO Auto-generated method stub
-		SharedPreferences settings = mactivity.getSharedPreferences(PREFS_NAME, 0);
-	      SharedPreferences.Editor editor = settings.edit();
-	      editor.putInt("offset", offset);
+  public static MediaClipIterator getInstance() {
+    return INSTANCE;
+  }
 
-	      // Commit the edits!
-	      editor.commit();
+  public MediaClip getCurrentMediaClip() {
+    return mediaclips.get(offset);
+  }
 
-	}
+  public void forward() {
+    offset++;
     
+    // TODO: This is okay for now.. but need better logic for
+    // paginating through the content from the server.
+    if (offset >= mediaclips.size()) {
+      offset = 0;
+    }
+  }
+
+  public void savestate() {
+    EarbugDB.getInstance().storeOffset(offset);
+  }
 }
