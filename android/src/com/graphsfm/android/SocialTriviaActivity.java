@@ -1,17 +1,27 @@
 package com.graphsfm.android;
 
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
+import android.widget.ViewFlipper;
 import android.os.CountDownTimer;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -28,7 +38,7 @@ public class SocialTriviaActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game);
-    
+        
     // TODO: move the google analytics initialization to SplashActivity
     // and share the tracker singleton instance.
     tracker = GoogleAnalyticsTracker.getInstance();
@@ -40,30 +50,8 @@ public class SocialTriviaActivity extends Activity {
     mediaPlayer = new MediaPlayer();
 
     try {
-      showView();
+      showFirstView();
 
-      Button button = (Button) findViewById(R.id.button);
-      button.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          tracker.trackEvent("Clicks", // Category
-              "Button", // Action
-              "stopmusic", // Label
-              77); // Value
-
-          musicStarted = false;
-          mediaPlayer.pause();
-          mtimer.cancel();
-          ToggleButton b = (ToggleButton) findViewById(R.id.button);
-          b.setChecked(false);
-
-          Intent myIntent = new Intent(v.getContext(), AnswerActivity.class);
-          myIntent.putExtra("score", score.getScore());
-          startActivityForResult(myIntent, ANSWER_QUESTION);
-
-        }
-
-      });
     } catch (Exception e1) {
       Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
       e1.printStackTrace();
@@ -89,13 +77,19 @@ public class SocialTriviaActivity extends Activity {
 
   boolean musicStarted = false;
 
-  protected void showView() throws Exception {
+  protected void showFirstView() {
     tracker.trackPageView("/play1");
 
     mediaPlayer.reset();
-    mediaPlayer.setDataSource(MediaClipIterator.getInstance()
-        .getCurrentMediaClip().getLocation());
-    mediaPlayer.prepare();
+    try {
+		mediaPlayer.setDataSource(MediaClipIterator.getInstance()
+		    .getCurrentMediaClip().getLocation());
+	    mediaPlayer.prepare();
+	
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
     TextView timer = (TextView) findViewById(R.id.timer);
     timer.setText("");
@@ -109,6 +103,26 @@ public class SocialTriviaActivity extends Activity {
 
     final Toast toast = Toast.makeText(context, text, duration);
     toast.show();
+
+    Button button = (Button) findViewById(R.id.button);
+    button.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        tracker.trackEvent("Clicks", // Category
+            "Button", // Action
+            "stopmusic", // Label
+            77); // Value
+
+        musicStarted = false;
+        mediaPlayer.pause();
+        mtimer.cancel();
+        ToggleButton b = (ToggleButton) findViewById(R.id.button);
+        b.setChecked(false);
+
+        showSecondView();
+      }
+
+    });
 
     final TextView mTextField = (TextView) findViewById(R.id.timer);
     mtimer = new CountDownTimer(34000, 1000) {
@@ -131,14 +145,87 @@ public class SocialTriviaActivity extends Activity {
         musicStarted = false;
         ToggleButton b = (ToggleButton) findViewById(R.id.button);
         b.setChecked(false);
-        Intent myIntent = new Intent(getApplicationContext(),
-            AnswerActivity.class);
-        myIntent.putExtra("score", score.getScore());
-        startActivityForResult(myIntent, ANSWER_QUESTION);
-        // mTextField.setText("done!");
+        
+        showSecondView();
       }
     }.start();
   }
+
+  protected void showSecondView()   {
+      final ViewFlipper vf = (ViewFlipper) findViewById(R.id.viewflipper);
+      vf.showNext();
+
+      Button skipbutton = (Button) findViewById(R.id.skip);
+      skipbutton.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          //Intent intent = new Intent();
+          //setResult(RESULT_OK, intent);
+          //finish();
+        	vf.showNext();
+            showFirstView();
+        }
+      });
+
+      Button nextbutton = (Button) findViewById(R.id.next);
+      nextbutton.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          TextView t = (TextView) findViewById(R.id.answer);
+          String answer = t.getText().toString();
+          String artist = MediaClipIterator.getInstance().getCurrentMediaClip()
+              .getBandName();
+          if (answer.equalsIgnoreCase(artist)) {
+            showDialog(1);
+          } else {
+            showDialog(0);
+          }
+
+          new Handler().postDelayed(new Runnable() {
+              @Override
+              public void run() {
+                  mdialog.dismiss();
+                  vf.showNext();
+                  showFirstView();
+             }
+            }, 1500);
+
+        }
+      });
+
+  }
+  Dialog mdialog;
+  
+  protected Dialog onCreateDialog(int b) {
+	    AlertDialog.Builder builder;
+	    Context mContext = this;
+	    LayoutInflater inflater = getLayoutInflater();
+	    View layout = inflater.inflate(R.layout.answer_feedback,
+	        (ViewGroup) findViewById(R.id.answer_feedback_layout));
+
+	    builder = new AlertDialog.Builder(mContext);
+	    builder.setView(layout);
+
+	    ImageView image = (ImageView) layout.findViewById(R.id.feedback_id);
+	    TextView text = (TextView) layout.findViewById(R.id.feedback_txt_id);
+	    if (b == 1) {
+	      image.setImageResource(R.drawable.correct);
+	      text
+	          .setText("That is correct ! The band is "
+	              + MediaClipIterator.getInstance().getCurrentMediaClip()
+	                  .getBandName());
+	    } else {
+	      image.setImageResource(R.drawable.wrong);
+	      text
+	          .setText("Better luck next time.. The band was "
+	              + MediaClipIterator.getInstance().getCurrentMediaClip()
+	                  .getBandName());
+	    }
+
+	    // toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+	    // toast.setDuration(Toast.LENGTH_LONG);
+	    mdialog = builder.create();
+
+	    return mdialog;
+	  }
 
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == ANSWER_QUESTION) {
@@ -151,7 +238,7 @@ public class SocialTriviaActivity extends Activity {
       }
       try {
         MediaClipIterator.getInstance().forward();
-        showView();
+        showFirstView();
       } catch (Exception e) {
         e.printStackTrace();
       }
