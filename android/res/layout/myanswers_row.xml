@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
+	<ImageView android:id="@+id/result_icon_small" android:layout_height="wrap_content"
+		android:src="@drawable/correct_small" android:layout_width="22px"
+		android:layout_marginTop="4px" android:layout_marginRight="4px"
+		android:layout_marginLeft="4px">
+	</ImageView>
+	<TextView android:text="name of song" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/songname"
+		android:textSize="16sp"
+		></TextView>
+		
+		<TextView android:text="band name" android:layout_width="wrap_content"
+	android:layout_height="wrap_content" android:id="@+id/bandname"
+	android:textSize="16sp"
+	></TextView>
+	<ImageButton android:id="@+id/play_small" android:layout_height="wrap_content"
+		android:src="@drawable/play_small" android:layout_width="22px"
+		android:layout_marginTop="4px" android:layout_marginRight="4px"
+		android:layout_marginLeft="4px">
+	</ImageButton>
+		
+</LinearLayout>
