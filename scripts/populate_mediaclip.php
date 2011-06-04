@@ -43,7 +43,7 @@ function getFMTURls() {
 	return $result;
 }
 
-$row = 0;
+$row = -1;
 
 $song_prefix = 'yearlyhit';
 $output_file = $song_prefix. '.json';
@@ -54,8 +54,9 @@ fwrite($fp, '{"mediaclip": ['. "\n");
 
 if (($handle = fopen("2000MusicList.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-          if ($row == 0)
-          {     $row = 1;  
+          if ($row == -1)
+          {     
+                $row = $row +1;
           		continue;
           }
           $row = $row +1;
@@ -76,9 +77,14 @@ if (($handle = fopen("2000MusicList.csv", "r")) !== FALSE) {
         $totaltime = ($end - $start) * 100;
          $start = $start *100;
         $mp3filename = $song_prefix . '_' . (string)$row . '.mp3';
-        
-        system('ffmpeg -i foo.flv -acodec libmp3lame -ss '. $start .' -t ' . $totaltime . ' ' . $mp3filename);
-        if ($row > 2 )
+		     
+		     
+		system('rm foo.flac foo-normalized.flac ');   
+        system('ffmpeg -i foo.flv  -ss '. $start .' -t ' . '30' . ' foo.flac');
+        system('sox --norm foo.flac  foo-normalized.flac');
+        system('ffmpeg -i foo-normalized.flac -acodec libmp3lame ' . $mp3filename);
+
+        if ($row > 1 )
             fwrite($fp , ',');
             
         fwrite($fp , '{"location": "http://www.earbuzilla.com/mediaclip/'. $mp3filename .'",');

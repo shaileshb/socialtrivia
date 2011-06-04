@@ -12,4 +12,6 @@
     <string name="offset">offset</string>
     <string name="timer_txt">Timer:</string>
     <string name="getready_txt">Get Ready!</string>
+    <string name="no_items">No entries to display.</string>
+    
 </resources>

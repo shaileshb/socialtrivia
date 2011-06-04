@@ -14,6 +14,7 @@
 		</activity>
 		<activity android:name=".AnswerActivity"></activity>
 		<activity android:name=".SocialTriviaActivity"></activity>
-		
+		<activity android:name=".MyMusicListActivity"></activity>
+		                         
 	</application>
 </manifest> 

@@ -1,8 +1,5 @@
 package com.graphsfm.android;
 
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,7 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.widget.CompoundButton;
 import android.widget.ViewFlipper;
 import android.os.CountDownTimer;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -38,7 +35,8 @@ public class SocialTriviaActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game);
-        
+     
+    
     // TODO: move the google analytics initialization to SplashActivity
     // and share the tracker singleton instance.
     tracker = GoogleAnalyticsTracker.getInstance();
@@ -116,7 +114,7 @@ public class SocialTriviaActivity extends Activity {
         musicStarted = false;
         mediaPlayer.pause();
         mtimer.cancel();
-        ToggleButton b = (ToggleButton) findViewById(R.id.button);
+        CompoundButton b = (CompoundButton) findViewById(R.id.button);
         b.setChecked(false);
 
         showSecondView();
@@ -130,9 +128,9 @@ public class SocialTriviaActivity extends Activity {
         if ((millisUntilFinished / 1000 <= 30) && !musicStarted) {
           toast.cancel();
           mediaPlayer.start();
-          TextView t = (TextView) findViewById(R.id.hint_id);
-          t.setText(R.string.hint_txt1);
-          ToggleButton b = (ToggleButton) findViewById(R.id.button);
+          //TextView t = (TextView) findViewById(R.id.hint_id);
+          //t.setText(R.string.hint_txt1);
+          CompoundButton b = (CompoundButton) findViewById(R.id.button);
           b.setChecked(true);
           musicStarted = true;
         }
@@ -143,7 +141,7 @@ public class SocialTriviaActivity extends Activity {
         // When count down is done turn off the music
         mediaPlayer.pause();
         musicStarted = false;
-        ToggleButton b = (ToggleButton) findViewById(R.id.button);
+        CompoundButton b = (CompoundButton) findViewById(R.id.button);
         b.setChecked(false);
         
         showSecondView();

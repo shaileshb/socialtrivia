@@ -11,7 +11,7 @@ public class MediaClipIterator {
 
   private MediaClipIterator() {
     try {
-      mediaclips = RestClient.connect("http://192.168.0.4/yearlyhit.json");
+      mediaclips = RestClient.connect("http://www.earbuzilla.com/mediaclip/yearlyhit/yearlyhit.json");
     } catch (Exception e) {
       Log.w(this.getClass().getSimpleName(), "Could not fetch media clips", e);
     }

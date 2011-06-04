@@ -34,7 +34,7 @@ public class TabLayoutActivity extends TabActivity {
 
     TabSpec tabSpec2 = mTabHost.newTabSpec("my_music_tab");
     tabSpec2.setIndicator("My Music");
-    tabSpec2.setContent(R.id.textview2);
+    tabSpec2.setContent(new Intent(this, MyMusicListActivity.class));
     mTabHost.addTab(tabSpec2);
 
     TabSpec tabSpec3 = mTabHost.newTabSpec("pref_tab");

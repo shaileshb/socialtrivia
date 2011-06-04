@@ -28,17 +28,7 @@
 			    	android:layout_below="@id/timer"
 		 			android:background="#FF909090"
 			    	android:layout_height="2dp"></View>
-			    	 <ToggleButton android:layout_below="@+id/view1"
-				
-				android:layout_above="@+id/hint_id"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:id="@+id/button"
-				android:textOn=""
-				android:textOff=""
-				android:background="@drawable/android_button"
-				android:layout_centerInParent="true"
-				></ToggleButton>
+			    	
 		
 			  		<TextView
 					android:id="@+id/hint_id"   
@@ -48,12 +38,23 @@
 				    android:text="@string/hint_txt"
 					android:layout_alignParentBottom='true'
 				    />
-				<View android:layout_width="wrap_content" 
+				<View android:layout_width="wrap_content"
+					 
 			    	android:id="@+id/view2" 
 			    	android:layout_above="@id/hint_id"
 		 			android:background="#FF909090"
 			    	android:layout_height="1dp"></View>
 				  
+			    <com.graphsfm.android.TimerAnimationView 
+			    	android:layout_below="@id/view1"
+					android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+id/button"
+				android:textOn=""
+				android:textOff=""
+				android:gravity="center"  
+				 android:layout_above="@id/view2"
+				/>
 		</RelativeLayout>
 
 	
