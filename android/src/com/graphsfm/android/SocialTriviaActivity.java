@@ -5,10 +5,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,7 @@ public class SocialTriviaActivity extends Activity {
   private MediaPlayer mediaPlayer;
   private Score score = new Score();
   static final int ANSWER_QUESTION = 4;
-  private Context mcontext;
+  ViewFlipper mviewFlipper;
   CountDownTimer mtimer;
   
   GoogleAnalyticsTracker tracker; // TODO: move this to SplashActivity
@@ -36,6 +36,7 @@ public class SocialTriviaActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game);
      
+    mviewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
     
     // TODO: move the google analytics initialization to SplashActivity
     // and share the tracker singleton instance.
@@ -44,15 +45,15 @@ public class SocialTriviaActivity extends Activity {
     
     EarbugDB.open(getApplicationContext());
 
-    mcontext = this;
+    
     mediaPlayer = new MediaPlayer();
 
     try {
       showFirstView();
 
     } catch (Exception e1) {
+      Log.e(this.getClass().getName(),  e1.getMessage());
       Toast.makeText(this, e1.getMessage(), Toast.LENGTH_SHORT).show();
-      e1.printStackTrace();
       return;
     }
   }
@@ -80,20 +81,21 @@ public class SocialTriviaActivity extends Activity {
 
     mediaPlayer.reset();
     try {
-		mediaPlayer.setDataSource(MediaClipIterator.getInstance()
+      mediaPlayer.setDataSource(MediaClipIterator.getInstance()
 		    .getCurrentMediaClip().getLocation());
 	    mediaPlayer.prepare();
 	
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+  	} catch (Exception e) {
+  		// TODO Auto-generated catch block
+  	  Log.e(this.getClass().getName(),  e.getMessage());
+  		e.printStackTrace();
+  	}
 
     TextView timer = (TextView) findViewById(R.id.timer);
     timer.setText("");
     TextView t = (TextView) findViewById(R.id.score);
 
-    t.setText("Score :" + score.getScore());
+    t.setText("Score :" + Integer.toString(Score.getScore()));
 
     Context context = getApplicationContext();
     CharSequence text = "Get Ready!";
@@ -104,18 +106,16 @@ public class SocialTriviaActivity extends Activity {
 
     Button button = (Button) findViewById(R.id.button);
     button.setOnClickListener(new OnClickListener() {
+
       @Override
       public void onClick(View v) {
         tracker.trackEvent("Clicks", // Category
             "Button", // Action
             "stopmusic", // Label
             77); // Value
-
-        musicStarted = false;
+        
         mediaPlayer.pause();
         mtimer.cancel();
-        CompoundButton b = (CompoundButton) findViewById(R.id.button);
-        b.setChecked(false);
 
         showSecondView();
       }
@@ -128,21 +128,17 @@ public class SocialTriviaActivity extends Activity {
         if ((millisUntilFinished / 1000 <= 30) && !musicStarted) {
           toast.cancel();
           mediaPlayer.start();
-          //TextView t = (TextView) findViewById(R.id.hint_id);
-          //t.setText(R.string.hint_txt1);
           CompoundButton b = (CompoundButton) findViewById(R.id.button);
           b.setChecked(true);
           musicStarted = true;
         }
-        mTextField.setText(Long.toString(millisUntilFinished / 1000));
+        long l = 30000 - millisUntilFinished;
+        mTextField.setText("Time: " + Long.toString(l / 1000));
       }
 
       public void onFinish() {
         // When count down is done turn off the music
         mediaPlayer.pause();
-        musicStarted = false;
-        CompoundButton b = (CompoundButton) findViewById(R.id.button);
-        b.setChecked(false);
         
         showSecondView();
       }
@@ -150,16 +146,39 @@ public class SocialTriviaActivity extends Activity {
   }
 
   protected void showSecondView()   {
-      final ViewFlipper vf = (ViewFlipper) findViewById(R.id.viewflipper);
-      vf.showNext();
+    
+    tracker.trackPageView("/play2");
+    
+      mviewFlipper.showNext();
 
+      Button reply_button = (Button) findViewById(R.id.replay);
+      TextView scoreTxtView = (TextView) findViewById(R.id.score1);
+      scoreTxtView.setText("Score :" + Integer.toString(Score.getScore()));
+
+      reply_button.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if( musicStarted == false) {
+            tracker.trackEvent("Clicks", // Category
+                "Button", // Action
+                "replay", // Label
+                78); // Value
+  
+            musicStarted = true;
+            mediaPlayer.seekTo(0);
+            mediaPlayer.start();
+          } else {
+            
+          }
+            
+        }
+      });
+      
       Button skipbutton = (Button) findViewById(R.id.skip);
       skipbutton.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
-          //Intent intent = new Intent();
-          //setResult(RESULT_OK, intent);
-          //finish();
-        	vf.showNext();
+            MediaClipIterator.getInstance().forward();
+            mviewFlipper.showNext();
             showFirstView();
         }
       });
@@ -171,6 +190,7 @@ public class SocialTriviaActivity extends Activity {
           String answer = t.getText().toString();
           String artist = MediaClipIterator.getInstance().getCurrentMediaClip()
               .getBandName();
+          score.addScore(10);
           if (answer.equalsIgnoreCase(artist)) {
             showDialog(1);
           } else {
@@ -181,7 +201,8 @@ public class SocialTriviaActivity extends Activity {
               @Override
               public void run() {
                   mdialog.dismiss();
-                  vf.showNext();
+                  MediaClipIterator.getInstance().forward();
+                  mviewFlipper.showNext();
                   showFirstView();
              }
             }, 1500);
@@ -218,28 +239,9 @@ public class SocialTriviaActivity extends Activity {
 	                  .getBandName());
 	    }
 
-	    // toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-	    // toast.setDuration(Toast.LENGTH_LONG);
 	    mdialog = builder.create();
-
 	    return mdialog;
 	  }
 
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == ANSWER_QUESTION) {
-      if (resultCode == RESULT_OK) {
-        // A contact was picked. Here we will just dis play it
-        // to the user.
-        if (data.hasExtra("score")) {
-          score.setScore(data.getExtras().getInt("score"));
-        }
-      }
-      try {
-        MediaClipIterator.getInstance().forward();
-        showFirstView();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  }
+
 }

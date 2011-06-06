@@ -45,7 +45,7 @@ public class SplashActivity extends Activity {
     if (isActive) {
       finish();
       Intent myIntent = new Intent(getApplicationContext(),
-          TabLayoutActivity.class);
+          SocialTriviaActivity.class);
       startActivity(myIntent);
     } else {
       Log.i(getClass().getSimpleName(),

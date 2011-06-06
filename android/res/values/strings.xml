@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EarBug</string>
-    <string name="hint_txt">Hit the play button to start the game! </string>
-    <string name="hint_txt1">Stop the music when you recognize the song. Quicker you recognize the music higher the score. </string>
+    <string name="hint_txt">Can you identify the song? Press the button to stop the music when you do. </string>
     <string name="question">What is name of the band?</string>
     <string name="play_game"> Play</string>
     <string name="end_game"> Done?</string>
