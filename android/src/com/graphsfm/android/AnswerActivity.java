@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +18,49 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.media.MediaPlayer;
 
 public class AnswerActivity extends Activity {
   private Dialog mdialog;
-
+  private boolean musicStarted;
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.game_answer);
+    final MediaPlayer mediaPlayer = new MediaPlayer();
+    try {
+    mediaPlayer.setDataSource(
+        MediaClipIterator.getInstance().getCurrentMediaClip().getLocation());
+    mediaPlayer.prepare();
+    }catch (Exception e) {
+      Log.e(this.getClass().getName(),  e.getMessage());
+      
+    }
+    Button reply_button = (Button) findViewById(R.id.replay);
+    TextView scoreTxtView = (TextView) findViewById(R.id.score1);
+    scoreTxtView.setText("Score :" + GlobalState.getInstance().getScore());
+
+    reply_button.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if( musicStarted == false) {
+          GlobalState.getInstance().getTracker().trackEvent("Clicks", // Category
+              "Button", // Action
+              "replay", // Label
+              78); // Value
+
+          musicStarted = true;
+          mediaPlayer.seekTo(0);
+          mediaPlayer.start();
+        } else {
+          
+        }
+          
+      }
+    });
 
     Button skipbutton = (Button) findViewById(R.id.skip);
     skipbutton.setOnClickListener(new OnClickListener() {
@@ -94,8 +129,6 @@ public class AnswerActivity extends Activity {
                   .getBandName());
     }
 
-    // toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-    // toast.setDuration(Toast.LENGTH_LONG);
     mdialog = builder.create();
 
     return mdialog;

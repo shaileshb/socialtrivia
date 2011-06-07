@@ -1,17 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>	
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:gravity="center_horizontal">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:gravity="center_horizontal">
-     
-		
-  		<TextView android:id="@+id/textview1" 
-	    	android:layout_alignParentRight="true" 
-	    	android:layout_width="wrap_content" 
-	    	android:text="@string/getready_txt"
-	    	android:layout_height="wrap_content">
-	    </TextView>
-  		<EditText android:id="@+id/editText1" android:layout_height="fill_parent" android:text="EditText" android:layout_width="fill_parent"></EditText>
-	
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:layout_weight="1" android:gravity="center_horizontal">
 
-        
-</RelativeLayout>
+		<TextView android:id="@+id/score1" android:text="@string/score_txt"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			style="@style/CodeFont"
+			/>
+		<TextView android:id="@+id/timer1"
+			android:layout_alignParentRight="true" android:layout_width="wrap_content"
+			android:text="" android:layout_height="wrap_content"
+			style="@style/CodeFont"
+			>
+		</TextView>
+		<View android:layout_width="wrap_content" android:id="@+id/view1"
+			android:layout_below="@id/timer" android:background="#FF909090"
+			android:layout_height="2dp"></View>
+			
+	<LinearLayout android:layout_below="@id/view1"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:gravity="center"			>		
+
+		<ToggleButton android:layout_below="@+id/score"
+
+			android:layout_above="@+id/hint_id" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/replay"
+			android:textOn="" android:textOff="" android:background="@drawable/replay_button"
+			android:layout_centerInParent="true"></ToggleButton>
+
+	</LinearLayout>
+	</RelativeLayout>
+
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:layout_weight="1">
+
+		<TextView android:id="@+id/question_label"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/question" />
+
+		<EditText android:id="@+id/answer" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_below="@id/question_label" />
+
+		<Button android:id="@+id/skip" android:layout_width="wrap_content"
+			android:layout_below="@id/answer" android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true" android:layout_marginLeft="10px"
+			android:text="@string/skip" />
+
+		<Button android:id="@+id/next" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_toRightOf="@id/skip"
+			android:layout_alignTop="@id/skip" android:text="@string/next" />
+	</RelativeLayout>
+
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,20 +30,14 @@ public class SocialTriviaActivity extends Activity {
   ViewFlipper mviewFlipper;
   CountDownTimer mtimer;
   
-  GoogleAnalyticsTracker tracker; // TODO: move this to SplashActivity
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game);
-     
-    mviewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
-    
-    // TODO: move the google analytics initialization to SplashActivity
-    // and share the tracker singleton instance.
-    tracker = GoogleAnalyticsTracker.getInstance();
-    tracker.start("UA-5092970-7", 20, this);
-    
+
+    GlobalState.getInstance().getTracker().trackPageView("page1");
+         
     EarbugDB.open(getApplicationContext());
 
     
@@ -71,18 +66,18 @@ public class SocialTriviaActivity extends Activity {
     EarbugDB.getInstance().close();
     
     // Stop the tracker when it is no longer needed.
-    tracker.stop();
+    GlobalState.getInstance().getTracker().stop();
   }
 
   boolean musicStarted = false;
 
   protected void showFirstView() {
-    tracker.trackPageView("/play1");
+    
 
     mediaPlayer.reset();
     try {
-      mediaPlayer.setDataSource(MediaClipIterator.getInstance()
-		    .getCurrentMediaClip().getLocation());
+      mediaPlayer.setDataSource(
+            MediaClipIterator.getInstance().getCurrentMediaClip().getLocation());
 	    mediaPlayer.prepare();
 	
   	} catch (Exception e) {
@@ -95,7 +90,7 @@ public class SocialTriviaActivity extends Activity {
     timer.setText("");
     TextView t = (TextView) findViewById(R.id.score);
 
-    t.setText("Score :" + Integer.toString(Score.getScore()));
+    t.setText("Score :" + GlobalState.getInstance().getScore());
 
     Context context = getApplicationContext();
     CharSequence text = "Get Ready!";
@@ -109,7 +104,7 @@ public class SocialTriviaActivity extends Activity {
 
       @Override
       public void onClick(View v) {
-        tracker.trackEvent("Clicks", // Category
+        GlobalState.getInstance().getTracker().trackEvent("Clicks", // Category
             "Button", // Action
             "stopmusic", // Label
             77); // Value
@@ -144,104 +139,17 @@ public class SocialTriviaActivity extends Activity {
       }
     }.start();
   }
-
-  protected void showSecondView()   {
-    
-    tracker.trackPageView("/play2");
-    
-      mviewFlipper.showNext();
-
-      Button reply_button = (Button) findViewById(R.id.replay);
-      TextView scoreTxtView = (TextView) findViewById(R.id.score1);
-      scoreTxtView.setText("Score :" + Integer.toString(Score.getScore()));
-
-      reply_button.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          if( musicStarted == false) {
-            tracker.trackEvent("Clicks", // Category
-                "Button", // Action
-                "replay", // Label
-                78); // Value
   
-            musicStarted = true;
-            mediaPlayer.seekTo(0);
-            mediaPlayer.start();
-          } else {
-            
-          }
-            
-        }
-      });
-      
-      Button skipbutton = (Button) findViewById(R.id.skip);
-      skipbutton.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-            MediaClipIterator.getInstance().forward();
-            mviewFlipper.showNext();
-            showFirstView();
-        }
-      });
-
-      Button nextbutton = (Button) findViewById(R.id.next);
-      nextbutton.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          TextView t = (TextView) findViewById(R.id.answer);
-          String answer = t.getText().toString();
-          String artist = MediaClipIterator.getInstance().getCurrentMediaClip()
-              .getBandName();
-          score.addScore(10);
-          if (answer.equalsIgnoreCase(artist)) {
-            showDialog(1);
-          } else {
-            showDialog(0);
-          }
-
-          new Handler().postDelayed(new Runnable() {
-              @Override
-              public void run() {
-                  mdialog.dismiss();
-                  MediaClipIterator.getInstance().forward();
-                  mviewFlipper.showNext();
-                  showFirstView();
-             }
-            }, 1500);
-
-        }
-      });
-
+  private int ANSWER_ACTIVITY_REQUEST_CODE = 4;
+  private void showSecondView() {
+    Intent intent = new Intent(getApplicationContext(),AnswerActivity.class);
+    startActivityForResult(intent, ANSWER_ACTIVITY_REQUEST_CODE);
   }
-  Dialog mdialog;
-  
-  protected Dialog onCreateDialog(int b) {
-	    AlertDialog.Builder builder;
-	    Context mContext = this;
-	    LayoutInflater inflater = getLayoutInflater();
-	    View layout = inflater.inflate(R.layout.answer_feedback,
-	        (ViewGroup) findViewById(R.id.answer_feedback_layout));
-
-	    builder = new AlertDialog.Builder(mContext);
-	    builder.setView(layout);
-
-	    ImageView image = (ImageView) layout.findViewById(R.id.feedback_id);
-	    TextView text = (TextView) layout.findViewById(R.id.feedback_txt_id);
-	    if (b == 1) {
-	      image.setImageResource(R.drawable.correct);
-	      text
-	          .setText("That is correct ! The band is "
-	              + MediaClipIterator.getInstance().getCurrentMediaClip()
-	                  .getBandName());
-	    } else {
-	      image.setImageResource(R.drawable.wrong);
-	      text
-	          .setText("Better luck next time.. The band was "
-	              + MediaClipIterator.getInstance().getCurrentMediaClip()
-	                  .getBandName());
-	    }
-
-	    mdialog = builder.create();
-	    return mdialog;
-	  }
-
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+      super.onActivityResult(requestCode, resultCode, intent);
+      
+      
+  }
 
 }

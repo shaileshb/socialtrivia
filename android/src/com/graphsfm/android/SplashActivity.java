@@ -15,7 +15,9 @@ public class SplashActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.splash);
-
+    GlobalState.open(getApplicationContext());
+    GlobalState.getInstance().getTracker().trackPageView("splash");
+        
     // TODO: This is a good place to kick off initialization
     // and wait for it to complete. For now - using a 3 second
     // idle loop to simulate initialization.
