@@ -52,7 +52,7 @@ $fp = fopen($output_file, 'w');
 fwrite($fp, '{"mediaclip": ['. "\n");
 
 
-if (($handle = fopen("2000MusicList.csv", "r")) !== FALSE) {
+if (($handle = fopen("ShaileshMusicList.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
           if ($row == -1)
           {     
@@ -73,7 +73,14 @@ if (($handle = fopen("2000MusicList.csv", "r")) !== FALSE) {
         echo 'FMT URLS';
         echo $fmt_urls[0];
         echo 'End of FMT URL';
-        system('wget -O foo.flv ' . '"' . $fmt_urls[0] . '"');
+        
+        foreach ($fmt_urls as $fmt) {
+        	system('wget --timeout 10 --tries=2  -O foo.flv ' . '"' . $fmt . '"', $ret);
+        	if ($ret == 0)
+        		break;
+        }
+        if($ret != 0)
+        	continue;
         $totaltime = ($end - $start) * 100;
          $start = $start *100;
         $mp3filename = $song_prefix . '_' . (string)$row . '.mp3';

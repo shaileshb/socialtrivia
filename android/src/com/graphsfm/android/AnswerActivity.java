@@ -32,13 +32,13 @@ public class AnswerActivity extends Activity {
     setContentView(R.layout.game_answer);
     final MediaPlayer mediaPlayer = new MediaPlayer();
     try {
-    mediaPlayer.setDataSource(
-        MediaClipIterator.getInstance().getCurrentMediaClip().getLocation());
-    mediaPlayer.prepare();
+        mediaPlayer.setDataSource(
+            MediaClipIterator.getInstance().getCurrentMediaClip().getLocation());
+        mediaPlayer.prepare();
     }catch (Exception e) {
       Log.e(this.getClass().getName(),  e.getMessage());
-      
     }
+
     Button reply_button = (Button) findViewById(R.id.replay);
     TextView scoreTxtView = (TextView) findViewById(R.id.score1);
     scoreTxtView.setText("Score :" + GlobalState.getInstance().getScore());
@@ -56,7 +56,8 @@ public class AnswerActivity extends Activity {
           mediaPlayer.seekTo(0);
           mediaPlayer.start();
         } else {
-          
+          mediaPlayer.stop();
+          musicStarted = false;
         }
           
       }
@@ -67,6 +68,7 @@ public class AnswerActivity extends Activity {
       public void onClick(View v) {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
+        mediaPlayer.stop();
         finish();
       }
     });
@@ -75,10 +77,12 @@ public class AnswerActivity extends Activity {
     nextbutton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
         TextView t = (TextView) findViewById(R.id.answer);
-        String answer = t.getText().toString();
+        String answer = t.getText().toString().toLowerCase();
         String artist = MediaClipIterator.getInstance().getCurrentMediaClip()
-            .getBandName();
-        if (answer.equalsIgnoreCase(artist)) {
+            .getBandName().toLowerCase();
+        if( artist.indexOf(answer) >= 0 )
+        {
+          GlobalState.getInstance().getScore().addScore(100);
           showAnswerResult(1);
         } else {
           showAnswerResult(0);
@@ -90,8 +94,9 @@ public class AnswerActivity extends Activity {
           public void run() {
             mdialog.dismiss();
             Intent intent = new Intent();
-            intent.putExtra("score", 45);
             setResult(RESULT_OK, intent);
+            
+            mediaPlayer.stop();
             finish();
           }
         }, 2000);

@@ -18,7 +18,7 @@
 			>
 		</TextView>
 		<View android:layout_width="wrap_content" android:id="@+id/view1"
-			android:layout_below="@id/timer" android:background="#FF909090"
+			android:layout_below="@id/timer1" android:background="#FF909090"
 			android:layout_height="2dp"></View>
 			
 	<LinearLayout android:layout_below="@id/view1"

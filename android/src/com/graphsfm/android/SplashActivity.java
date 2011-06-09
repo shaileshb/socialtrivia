@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Window;
 
 public class SplashActivity extends Activity {
   private static final int SPLASH_TIME = 3000;
@@ -14,7 +15,10 @@ public class SplashActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.splash);
+    
     GlobalState.open(getApplicationContext());
     GlobalState.getInstance().getTracker().trackPageView("splash");
         
